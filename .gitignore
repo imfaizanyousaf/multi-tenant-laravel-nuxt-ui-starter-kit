@@ -25,3 +25,21 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+components.d.ts
+auto-imports.d.ts
+
+# Laravel boost
+.agents
+.claude
+.cursor
+.factory
+.github
+.junie
+.kiro
+.codex
+.amp
+.mcp.json
+AGENTS.md
+CLAUDE.md
+boost.json
+opencode.json
