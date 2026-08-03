@@ -17,10 +17,14 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->uuid,
+            'id' => $this->uuid ?? (string) $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at,
+            'avatar' => [
+                'src' => 'https://unavatar.io/'.$this->email,
+                'alt' => $this->name,
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

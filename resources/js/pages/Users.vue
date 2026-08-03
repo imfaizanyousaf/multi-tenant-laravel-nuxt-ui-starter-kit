@@ -2,12 +2,20 @@
   import Layout from '@/layouts/Default.vue'
   import type { TableColumn } from '@nuxt/ui'
   import { getPaginationRowModel, type Row } from '@tanstack/table-core'
-  import { useFetch } from '@vueuse/core'
   import { upperFirst } from 'scule'
-  import { h, ref, resolveComponent, useTemplateRef, watch } from 'vue'
+  import { computed, h, ref, resolveComponent, useTemplateRef } from 'vue'
   import type { User } from '../types'
 
   defineOptions({ layout: Layout })
+
+  const props = withDefaults(
+    defineProps<{
+      users?: User[]
+    }>(),
+    {
+      users: () => [],
+    },
+  )
 
   const UAvatar = resolveComponent('UAvatar')
   const UButton = resolveComponent('UButton')
@@ -27,7 +35,7 @@
   const columnVisibility = ref()
   const rowSelection = ref({ 1: true })
 
-  const { data, isFetching } = useFetch('https://dashboard-template.nuxt.dev/api/customers', { initialData: [] }).json<User[]>()
+  const data = computed(() => props.users)
 
   function getRowItems(row: Row<User>) {
     return [
@@ -36,38 +44,20 @@
         label: 'Actions',
       },
       {
-        label: 'Copy customer ID',
-        icon: 'i-lucide-copy',
-        onSelect() {
-          navigator.clipboard.writeText(row.original.id.toString())
-          toast.add({
-            title: 'Copied to clipboard',
-            description: 'Customer ID copied to clipboard',
-          })
-        },
-      },
-      {
-        type: 'separator',
-      },
-      {
-        label: 'View customer details',
+        label: 'View user details',
         icon: 'i-lucide-list',
       },
       {
-        label: 'View customer payments',
-        icon: 'i-lucide-wallet',
-      },
-      {
         type: 'separator',
       },
       {
-        label: 'Delete customer',
+        label: 'Delete user',
         icon: 'i-lucide-trash',
         color: 'error',
         onSelect() {
           toast.add({
-            title: 'Customer deleted',
-            description: 'The customer has been deleted.',
+            title: 'User deleted',
+            description: 'The user has been deleted.',
           })
         },
       },
@@ -89,10 +79,6 @@
           'onUpdate:modelValue': (value: boolean | 'indeterminate') => row.toggleSelected(!!value),
           ariaLabel: 'Select row',
         }),
-    },
-    {
-      accessorKey: 'id',
-      header: 'ID',
     },
     {
       accessorKey: 'name',
@@ -123,22 +109,18 @@
       },
     },
     {
-      accessorKey: 'location',
-      header: 'Location',
-      cell: ({ row }) => row.original.location,
-    },
-    {
-      accessorKey: 'status',
-      header: 'Status',
-      filterFn: 'equals',
+      accessorKey: 'email_verified_at',
+      header: 'Email Verified',
       cell: ({ row }) => {
-        const color = {
-          subscribed: 'success' as const,
-          unsubscribed: 'error' as const,
-          bounced: 'warning' as const,
-        }[row.original.status]
-
-        return h(UBadge, { class: 'capitalize', variant: 'subtle', color }, () => row.original.status)
+        const isVerified = !!row.original.email_verified_at
+        return h(
+          UBadge,
+          {
+            variant: 'subtle',
+            color: isVerified ? 'success' : 'neutral',
+          },
+          () => (isVerified ? 'Verified' : 'Unverified'),
+        )
       },
     },
     {
@@ -168,24 +150,6 @@
     },
   ]
 
-  const statusFilter = ref('all')
-
-  watch(
-    () => statusFilter.value,
-    (newVal) => {
-      if (!table?.value?.tableApi) return
-
-      const statusColumn = table.value.tableApi.getColumn('status')
-      if (!statusColumn) return
-
-      if (newVal === 'all') {
-        statusColumn.setFilterValue(undefined)
-      } else {
-        statusColumn.setFilterValue(newVal)
-      }
-    },
-  )
-
   const pagination = ref({
     pageIndex: 0,
     pageSize: 10,
@@ -193,15 +157,15 @@
 </script>
 
 <template>
-  <UDashboardPanel id="customers">
+  <UDashboardPanel id="users">
     <template #header>
-      <UDashboardNavbar title="Customers">
+      <UDashboardNavbar title="Users">
         <template #leading>
           <UDashboardSidebarCollapse as="button" :disabled="false" />
         </template>
 
         <template #right>
-          <CustomersAddModal />
+          <UsersAddModal />
         </template>
       </UDashboardNavbar>
     </template>
@@ -217,7 +181,7 @@
         />
 
         <div class="flex flex-wrap items-center gap-1.5">
-          <CustomersDeleteModal :count="table?.tableApi?.getFilteredSelectedRowModel().rows.length">
+          <UsersDeleteModal :count="table?.tableApi?.getFilteredSelectedRowModel().rows.length">
             <UButton
               v-if="table?.tableApi?.getFilteredSelectedRowModel().rows.length"
               label="Delete"
@@ -231,20 +195,8 @@
                 </UKbd>
               </template>
             </UButton>
-          </CustomersDeleteModal>
+          </UsersDeleteModal>
 
-          <USelect
-            v-model="statusFilter"
-            :items="[
-              { label: 'All', value: 'all' },
-              { label: 'Subscribed', value: 'subscribed' },
-              { label: 'Unsubscribed', value: 'unsubscribed' },
-              { label: 'Bounced', value: 'bounced' },
-            ]"
-            :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
-            placeholder="Filter status"
-            class="min-w-28"
-          />
           <UDropdownMenu
             :items="
               table?.tableApi
@@ -281,7 +233,6 @@
         class="shrink-0"
         :data="data ?? []"
         :columns="columns"
-        :loading="isFetching"
         :ui="{
           base: 'table-fixed border-separate border-spacing-0',
           thead: '[&>tr]:bg-elevated/50 [&>tr]:after:content-none',

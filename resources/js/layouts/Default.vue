@@ -17,9 +17,9 @@
         },
       },
       {
-        label: 'Customers',
+        label: 'Users',
         icon: 'i-lucide-users',
-        to: '/customers',
+        to: '/users',
         onSelect: () => {
           open.value = false
         },

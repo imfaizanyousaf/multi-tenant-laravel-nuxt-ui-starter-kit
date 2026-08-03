@@ -22,8 +22,6 @@ export interface User {
   email: string
   email_verified_at: string | null
   avatar?: AvatarProps
-  status: UserStatus
-  location: string
   created_at: string
   updated_at: string
 }
