@@ -17,15 +17,6 @@
         },
       },
       {
-        label: 'Inbox',
-        icon: 'i-lucide-inbox',
-        to: '/inbox',
-        badge: '4',
-        onSelect: () => {
-          open.value = false
-        },
-      },
-      {
         label: 'Customers',
         icon: 'i-lucide-users',
         to: '/customers',
