@@ -24,4 +24,6 @@ Route::middleware('auth')->group(function (): void {
     Route::get('settings/members', fn () => Inertia::render('settings/Members'))->name('members');
 
     Route::get('settings/notifications', fn () => Inertia::render('settings/Notifications'))->name('notifications');
+
+    Route::get('settings/appearance', fn () => Inertia::render('settings/Appearance'))->name('appearance');
 });

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { appearance } from '@/routes'
   import type { NavigationMenuItem } from '@nuxt/ui'
 
   const { url } = usePage()
@@ -56,6 +57,13 @@
           {
             label: 'Security',
             to: '/settings/security',
+            onSelect: () => {
+              open.value = false
+            },
+          },
+          {
+            label: 'Appearance',
+            to: appearance.url(),
             onSelect: () => {
               open.value = false
             },

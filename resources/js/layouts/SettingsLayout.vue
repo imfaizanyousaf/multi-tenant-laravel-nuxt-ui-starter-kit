@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { appearance } from '@/routes'
   import type { NavigationMenuItem } from '@nuxt/ui'
 
   const links = [
@@ -23,6 +24,11 @@
         label: 'Security',
         icon: 'i-lucide-shield',
         to: '/settings/security',
+      },
+      {
+        label: 'Appearance',
+        icon: 'i-lucide-sun-moon',
+        to: appearance.url(),
       },
     ],
     [

@@ -41,7 +41,7 @@
     return [
       {
         type: 'label',
-        label: 'Actions',
+        label: `Actions for ${row.original.name}`,
       },
       {
         label: 'View user details',
@@ -57,7 +57,7 @@
         onSelect() {
           toast.add({
             title: 'User deleted',
-            description: 'The user has been deleted.',
+            description: `${row.original.name} has been deleted.`,
           })
         },
       },

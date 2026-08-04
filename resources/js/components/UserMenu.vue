@@ -2,13 +2,11 @@
   import { logout } from '@/routes'
   import { router } from '@inertiajs/vue3'
   import type { DropdownMenuItem } from '@nuxt/ui'
-  import { useColorMode } from '@vueuse/core'
 
   defineProps<{
     collapsed?: boolean
   }>()
 
-  const colorMode = useColorMode()
   const auth = useAuth()
   const { getInitials } = useInitials()
 
@@ -40,39 +38,6 @@
         label: 'Settings',
         icon: 'i-lucide-settings',
         to: '/settings/profile',
-      },
-    ],
-    [
-      {
-        label: 'Appearance',
-        icon: 'i-lucide-sun-moon',
-        children: [
-          {
-            label: 'Light',
-            icon: 'i-lucide-sun',
-            type: 'checkbox',
-            checked: colorMode.value === 'light',
-            onSelect(e: Event) {
-              e.preventDefault()
-
-              colorMode.value = 'light'
-            },
-          },
-          {
-            label: 'Dark',
-            icon: 'i-lucide-moon',
-            type: 'checkbox',
-            checked: colorMode.value === 'dark',
-            onUpdateChecked(checked: boolean) {
-              if (checked) {
-                colorMode.value = 'dark'
-              }
-            },
-            onSelect(e: Event) {
-              e.preventDefault()
-            },
-          },
-        ],
       },
     ],
     [
@@ -111,15 +76,5 @@
         trailingIcon: 'text-dimmed',
       }"
     />
-
-    <template #chip-leading="{ item }">
-      <span
-        :style="{
-          '--chip-light': `var(--color-${(item as any).chip}-500)`,
-          '--chip-dark': `var(--color-${(item as any).chip}-400)`,
-        }"
-        class="ms-0.5 size-2 rounded-full bg-(--chip-light) dark:bg-(--chip-dark)"
-      />
-    </template>
   </UDropdownMenu>
 </template>
