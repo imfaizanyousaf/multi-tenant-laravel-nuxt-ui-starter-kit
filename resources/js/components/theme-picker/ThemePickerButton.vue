@@ -18,13 +18,13 @@
     variant="outline"
     :icon="icon"
     :label="label"
-    class="rounded-lg text-[12px] capitalize ring-default cursor-pointer justify-start transition-all"
-    :class="[selected ? 'bg-elevated ring-2 ring-primary font-medium' : 'hover:bg-elevated/50']"
+    class="cursor-pointer justify-start rounded-lg text-[12px] capitalize ring-default transition-all"
+    :class="[selected ? 'bg-elevated font-medium ring-2 ring-primary' : 'hover:bg-elevated/50']"
   >
     <template v-if="chip || !!slots.leading" #leading>
       <slot name="leading">
         <span
-          class="inline-block size-2.5 rounded-full shrink-0"
+          class="inline-block size-2.5 shrink-0 rounded-full"
           :class="`bg-(--color-light) dark:bg-(--color-dark)`"
           :style="{
             '--color-light': `var(--color-${chip}-500)`,

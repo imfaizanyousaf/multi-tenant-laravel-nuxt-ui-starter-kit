@@ -17,7 +17,7 @@ class UserController extends Controller
     public function __invoke(): Response
     {
         return Inertia::render('Users', [
-            'users' => UserResource::collection(User::latest()->get())->resolve(),
+            'users' => UserResource::collection(User::query()->latest()->get())->resolve(),
         ]);
     }
 }

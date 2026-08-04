@@ -101,12 +101,7 @@ export function useTheme() {
   }
 
   const isCustomized = computed(() => {
-    return (
-      _primary.value !== 'green' ||
-      _neutral.value !== 'zinc' ||
-      _radius.value !== 0.25 ||
-      _blackAsPrimary.value
-    )
+    return _primary.value !== 'green' || _neutral.value !== 'zinc' || _radius.value !== 0.25 || _blackAsPrimary.value
   })
 
   return {

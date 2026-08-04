@@ -8,18 +8,7 @@
 
   const open = ref(false)
 
-  const {
-    neutralColors,
-    neutral,
-    primaryColors,
-    primary,
-    blackAsPrimary,
-    setBlackAsPrimary,
-    radiuses,
-    radius,
-    resetTheme,
-    isCustomized,
-  } = useTheme()
+  const { neutralColors, neutral, primaryColors, primary, blackAsPrimary, setBlackAsPrimary, radiuses, radius, resetTheme, isCustomized } = useTheme()
 
   const radiusLabels: Record<number, string> = {
     0: '0 (None)',
@@ -47,15 +36,7 @@
     <template #content>
       <div class="flex items-center justify-between">
         <span class="text-xs font-semibold text-highlighted">Theme Settings</span>
-        <UButton
-          v-if="isCustomized"
-          size="xs"
-          color="neutral"
-          variant="ghost"
-          icon="i-lucide-rotate-ccw"
-          label="Reset"
-          @click="resetTheme"
-        />
+        <UButton v-if="isCustomized" size="xs" color="neutral" variant="ghost" icon="i-lucide-rotate-ccw" label="Reset" @click="resetTheme" />
       </div>
 
       <fieldset>
@@ -63,7 +44,7 @@
         <div class="grid grid-cols-3 gap-1.5">
           <ThemePickerButton label="Black" :selected="blackAsPrimary" @click="setBlackAsPrimary(true)">
             <template #leading>
-              <span class="inline-block size-2.5 rounded-full bg-black dark:bg-white shrink-0" />
+              <span class="inline-block size-2.5 shrink-0 rounded-full bg-black dark:bg-white" />
             </template>
           </ThemePickerButton>
 
@@ -111,15 +92,11 @@
   <!-- Inline / Full Page Mode -->
   <div v-else class="contents">
     <!-- Primary Color -->
-    <UFormField
-      label="Primary Color"
-      description="Select an accent color for buttons, active states, and highlights."
-      class="flex flex-col gap-3"
-    >
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2">
+    <UFormField label="Primary Color" description="Select an accent color for buttons, active states, and highlights." class="flex flex-col gap-3">
+      <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         <ThemePickerButton label="Black" :selected="blackAsPrimary" class="w-full justify-center" @click="setBlackAsPrimary(true)">
           <template #leading>
-            <span class="inline-block size-2.5 rounded-full bg-black dark:bg-white shrink-0" />
+            <span class="inline-block size-2.5 shrink-0 rounded-full bg-black dark:bg-white" />
           </template>
         </ThemePickerButton>
 
@@ -138,12 +115,8 @@
     <USeparator />
 
     <!-- Neutral Color -->
-    <UFormField
-      label="Neutral Color"
-      description="Select a neutral palette for backgrounds, borders, and muted text."
-      class="flex flex-col gap-3"
-    >
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2">
+    <UFormField label="Neutral Color" description="Select a neutral palette for backgrounds, borders, and muted text." class="flex flex-col gap-3">
+      <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         <ThemePickerButton
           v-for="color in neutralColors"
           :key="color"
@@ -159,12 +132,8 @@
     <USeparator />
 
     <!-- Border Radius -->
-    <UFormField
-      label="Border Radius"
-      description="Select corner roundedness for UI elements across the application."
-      class="flex flex-col gap-3"
-    >
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-5 mt-2">
+    <UFormField label="Border Radius" description="Select corner roundedness for UI elements across the application." class="flex flex-col gap-3">
+      <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-5">
         <ThemePickerButton
           v-for="r in radiuses"
           :key="r"

@@ -49,12 +49,8 @@
 
       <UPageCard variant="subtle">
         <!-- Theme Mode -->
-        <UFormField
-          label="Theme Mode"
-          description="Choose between light, dark, or system mode."
-          class="flex flex-col gap-3"
-        >
-          <div class="grid grid-cols-3 gap-2 sm:grid-cols-3 mt-2">
+        <UFormField label="Theme Mode" description="Choose between light, dark, or system mode." class="flex flex-col gap-3">
+          <div class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-3">
             <ThemePickerButton
               v-for="item in items"
               :key="item.value"
