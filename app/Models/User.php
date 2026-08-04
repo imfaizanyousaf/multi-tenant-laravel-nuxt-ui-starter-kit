@@ -50,4 +50,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return ['uuid'];
     }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
 }
