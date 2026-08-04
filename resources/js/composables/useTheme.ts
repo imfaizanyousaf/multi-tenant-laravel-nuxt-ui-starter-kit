@@ -27,16 +27,21 @@ if (typeof window !== 'undefined') {
   })
 }
 
+let _syncedAppConfig: ReturnType<typeof useAppConfig> | null = null
+
 export function useTheme() {
   const appConfig = useAppConfig()
 
   // Keep appConfig in sync with persistent refs
-  watchEffect(() => {
-    if (appConfig?.ui?.colors) {
-      appConfig.ui.colors.primary = _primary.value
-      appConfig.ui.colors.neutral = _neutral.value
-    }
-  })
+  if (_syncedAppConfig !== appConfig) {
+    _syncedAppConfig = appConfig
+    watchEffect(() => {
+      if (appConfig?.ui?.colors) {
+        appConfig.ui.colors.primary = _primary.value
+        appConfig.ui.colors.neutral = _neutral.value
+      }
+    })
+  }
 
   const neutralColors = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'taupe', 'mauve', 'mist', 'olive']
   const neutral = computed({
