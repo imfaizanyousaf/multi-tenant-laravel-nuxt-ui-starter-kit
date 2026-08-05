@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Actions\User;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class DeleteBulkUsers
 {
@@ -16,7 +17,7 @@ class DeleteBulkUsers
     public function handle(array $ids, string $currentUserId): int
     {
         return User::query()
-            ->where(function ($query) use ($ids): void {
+            ->where(function (Builder $query) use ($ids): void {
                 $query->whereIn('uuid', $ids)
                     ->orWhereIn('id', $ids);
             })

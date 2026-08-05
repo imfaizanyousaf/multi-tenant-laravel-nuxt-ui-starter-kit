@@ -6,6 +6,7 @@ namespace App\Actions\User;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 use function explode;
@@ -34,7 +35,7 @@ class GetPaginatedUsers
 
         // Search query
         if (! empty($search) && is_string($search)) {
-            $query->where(function ($q) use ($search): void {
+            $query->where(function (Builder $q) use ($search): void {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
