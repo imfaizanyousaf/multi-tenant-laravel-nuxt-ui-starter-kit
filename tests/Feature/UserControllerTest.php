@@ -74,14 +74,14 @@ test('authenticated users can create a new user', function (): void {
 
     $response = $this->actingAs($admin)->post(route('users.store'), [
         'name' => 'Jane Doe',
-        'email' => 'jane@example.com',
+        'email' => 'jane@laravel.com',
         'password' => 'password123',
     ]);
 
     $response->assertRedirect();
     $this->assertDatabaseHas('users', [
         'name' => 'Jane Doe',
-        'email' => 'jane@example.com',
+        'email' => 'jane@laravel.com',
     ]);
 });
 
@@ -91,12 +91,12 @@ test('authenticated users can update a user', function (): void {
 
     $response = $this->actingAs($admin)->put(route('users.update', $user), [
         'name' => 'Updated Name',
-        'email' => 'updated@example.com',
+        'email' => 'updated@laravel.com',
     ]);
 
     $response->assertRedirect();
     expect($user->fresh()->name)->toBe('Updated Name');
-    expect($user->fresh()->email)->toBe('updated@example.com');
+    expect($user->fresh()->email)->toBe('updated@laravel.com');
 });
 
 test('authenticated users can update a user password', function (): void {
@@ -105,7 +105,7 @@ test('authenticated users can update a user password', function (): void {
 
     $response = $this->actingAs($admin)->put(route('users.update', $user), [
         'name' => 'Updated Name',
-        'email' => 'updated_pass@example.com',
+        'email' => 'updated_pass@laravel.com',
         'password' => 'new-password123',
     ]);
 

@@ -4,7 +4,6 @@ import type { User } from '@/types'
 import type { DataTableColumn, DataTableConfig } from '@/types/datatable'
 import { h, resolveComponent } from 'vue'
 
-const UAvatar = resolveComponent('UAvatar')
 const UBadge = resolveComponent('UBadge')
 
 /**
@@ -20,18 +19,6 @@ export const columns: DataTableColumn<User>[] = [
     accessorKey: 'name',
     header: 'Name',
     sortable: true,
-    cell: ({ row }) => {
-      return h('div', { class: 'flex items-center gap-3' }, [
-        h(UAvatar, {
-          ...row.original.avatar,
-          size: 'md',
-        }),
-        h('div', undefined, [
-          h('p', { class: 'font-medium text-highlighted' }, row.original.name),
-          h('p', { class: 'text-xs text-muted' }, `@${row.original.name?.toLowerCase()?.replace(/\s+/g, '') ?? ''}`),
-        ]),
-      ])
-    },
   },
   {
     accessorKey: 'email',

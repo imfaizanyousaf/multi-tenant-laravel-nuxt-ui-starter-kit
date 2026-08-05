@@ -2,6 +2,7 @@
   import { destroy, destroyBulk, table } from '@/actions/App/Http/Controllers/UserController'
   import DataTable from '@/components/app/DataTable/Index.vue'
   import { baseBulkActions, baseRowActions, columns, config } from '@/components/users/data'
+  import ColumnName from '@/components/users/datatable/ColumnName.vue'
   import UsersFormModal from '@/components/users/UsersFormModal.vue'
   import { useConfirm } from '@/composables/useConfirm'
   import { createActions } from '@/composables/useDataTableActions'
@@ -122,7 +123,11 @@
         search-placeholder="Search users..."
         server-side
         @refresh="handleRefresh"
-      />
+      >
+        <template #name-cell="{ row }">
+          <ColumnName :row="row.original" />
+        </template>
+      </DataTable>
     </template>
   </UDashboardPanel>
 </template>
