@@ -120,9 +120,7 @@ test('authenticated users can delete a user', function (): void {
     $response = $this->actingAs($admin)->delete(route('users.destroy', $user));
 
     $response->assertRedirect();
-    $this->assertDatabaseMissing('users', [
-        'id' => $user->id,
-    ]);
+    $this->assertSoftDeleted($user);
 });
 
 test('user cannot delete their own account via user crud', function (): void {
@@ -147,8 +145,6 @@ test('authenticated users can bulk delete users', function (): void {
 
     $response->assertRedirect();
     foreach ($users as $u) {
-        $this->assertDatabaseMissing('users', [
-            'id' => $u->id,
-        ]);
+        $this->assertSoftDeleted($u);
     }
 });

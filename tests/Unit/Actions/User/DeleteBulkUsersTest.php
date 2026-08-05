@@ -17,7 +17,7 @@ test('delete bulk users works with integer ids', function (): void {
 
     expect($deletedCount)->toBe(2);
     foreach ($users as $user) {
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        $this->assertSoftDeleted($user);
     }
 });
 
@@ -30,7 +30,7 @@ test('delete bulk users works with uuid strings', function (): void {
 
     expect($deletedCount)->toBe(2);
     foreach ($users as $user) {
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        $this->assertSoftDeleted($user);
     }
 });
 
@@ -45,5 +45,5 @@ test('delete bulk users excludes current user id', function (): void {
 
     expect($deletedCount)->toBe(1);
     $this->assertDatabaseHas('users', ['id' => $admin->id]);
-    $this->assertDatabaseMissing('users', ['id' => $otherUser->id]);
+    $this->assertSoftDeleted($otherUser);
 });
