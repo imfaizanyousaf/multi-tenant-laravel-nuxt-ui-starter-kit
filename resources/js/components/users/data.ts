@@ -79,7 +79,7 @@ export const baseRowActions: BaseActionDefinition[] = [
 export const baseBulkActions: BaseBulkActionDefinition[] = [
   {
     id: 'bulk-delete',
-    label: 'Delete selected',
+    label: 'Delete',
     icon: 'i-lucide-trash',
     color: 'error',
   },

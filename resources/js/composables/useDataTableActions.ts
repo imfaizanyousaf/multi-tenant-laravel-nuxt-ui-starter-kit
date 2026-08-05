@@ -13,7 +13,7 @@ export interface BaseActionDefinition {
 
 export interface BaseBulkActionDefinition {
   id: string
-  label: string
+  label?: string
   icon?: string
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral'
   variant?: 'solid' | 'outline' | 'soft' | 'ghost' | 'link'

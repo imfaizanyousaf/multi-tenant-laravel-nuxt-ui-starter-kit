@@ -131,7 +131,6 @@
     :open="isOpen"
     :description="description"
     :title="title"
-    :dismissible="false"
     @update:open="
       (val) => {
         setOpen(val)
@@ -146,7 +145,7 @@
     </template>
     <ReuseFormTemplate />
     <template #footer>
-      <div class="flex w-full flex-col gap-2 md:flex-row-reverse">
+      <div class="mt-8 mb-4 flex w-full flex-col gap-4 md:mt-0 md:mb-0 md:flex-row-reverse md:gap-2">
         <UButton
           :disabled="!form.isDirty"
           form="user-form"

@@ -41,8 +41,8 @@
     leave-to-class="opacity-0 translate-y-4"
   >
     <div v-if="shouldShow">
-      <div class="flex h-10 items-center rounded-lg border border-accented bg-default pr-1 pl-2.5 shadow-lg">
-        <span class="text-sm whitespace-nowrap"> {{ context.selectedRows.value.length }} selected </span>
+      <div class="flex h-fit items-center rounded-lg border border-accented bg-default px-4 py-2 shadow-lg">
+        <span class="text-md whitespace-nowrap"> {{ context.selectedRows.value.length }} Selected </span>
         <USeparator orientation="vertical" class="mr-1 ml-2 data-[orientation=vertical]:h-4" />
 
         <template v-if="visibleBulkActions.length > 0">
@@ -50,17 +50,18 @@
             <UButton
               :color="action.color"
               variant="ghost"
+              :label="action.label"
               :icon="action.icon"
               :disabled="typeof action.disabled === 'function' ? action.disabled(context.selectedRows.value) : action.disabled"
               size="sm"
-              class="mr-1"
+              class="mr-1 text-sm"
               @click="action.onClick(context.selectedRows.value)"
             />
           </UTooltip>
         </template>
 
         <UTooltip text="Clear selection" :kbds="['Esc']" :content="{ sideOffset: 10 }">
-          <UButton variant="ghost" color="neutral" icon="i-lucide-x" size="sm" @click="context.clearSelection" />
+          <UButton variant="ghost" color="neutral" icon="i-lucide-x" size="md" class="-mr-2" @click="context.clearSelection" />
         </UTooltip>
       </div>
     </div>
