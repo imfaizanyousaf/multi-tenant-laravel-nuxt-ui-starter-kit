@@ -25,7 +25,6 @@ class GetPaginatedUsers
     {
         $request ??= request();
 
-        /** @var int $perPage */
         $perPage = (int) ($request->input('per_page') ?? 10);
         $search = $request->input('search');
         $sort = $request->input('sort');

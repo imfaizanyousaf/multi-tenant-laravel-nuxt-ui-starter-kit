@@ -16,7 +16,7 @@ class CreateUser
      */
     public function handle(array $data): User
     {
-        return User::create([
+        return User::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'] ?? 'password'),
