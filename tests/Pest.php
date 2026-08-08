@@ -11,6 +11,7 @@
 |
 */
 
+use Database\Seeders\PermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
@@ -24,6 +25,7 @@ pest()->extend(TestCase::class)
         Sleep::fake();
 
         $this->freezeTime();
+        $this->seed(PermissionSeeder::class);
     })
     ->in('Browser', 'Feature', 'Unit');
 

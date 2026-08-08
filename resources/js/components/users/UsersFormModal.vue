@@ -1,15 +1,18 @@
 <script lang="ts" setup>
-  import { store, update } from '@/actions/App/Http/Controllers/UserController'
+  import { options, store, update } from '@/actions/App/Http/Controllers/UserController'
   import DialogForm from '@/components/app/DialogForm.vue'
+  import { useAuth } from '@/composables/useAuth'
   import type { User } from '@/types'
-  import { useForm } from '@inertiajs/vue3'
+  import { useForm, useHttp } from '@inertiajs/vue3'
   import { createReusableTemplate } from '@vueuse/core'
-  import { computed, ref, watch } from 'vue'
+  import { computed, onMounted, ref, watch } from 'vue'
 
   const [DefineFormTemplate, ReuseFormTemplate] = createReusableTemplate()
+  const { hasPermission } = useAuth()
 
   const props = defineProps<{
     user?: User | null
+    roles?: string[]
     open?: boolean
   }>()
 
@@ -19,12 +22,31 @@
   }>()
 
   const isOpen = ref(false)
+  const rolesOptions = ref<string[]>(props.roles ?? [])
+  const rolesHttp = useHttp()
+
+  function fetchRoles() {
+    if (rolesOptions.value.length === 0) {
+      rolesHttp.get(options.url(), {
+        onSuccess: (data: any) => {
+          rolesOptions.value = (data as string[]) ?? []
+        },
+      })
+    }
+  }
+
+  onMounted(() => {
+    fetchRoles()
+  })
 
   watch(
     () => props.open,
     (val) => {
       if (val !== undefined) {
         isOpen.value = val
+        if (val) {
+          fetchRoles()
+        }
       }
     },
     { immediate: true },
@@ -40,6 +62,7 @@
     name: '',
     email: '',
     password: '',
+    roles: [] as string[],
   })
 
   function resetForm() {
@@ -48,17 +71,20 @@
   }
 
   function openModal(user?: User | null) {
+    fetchRoles()
     resetForm()
     if (user?.id) {
       form.id = user.id
       form.name = user.name ?? ''
       form.email = user.email ?? ''
       form.password = ''
+      form.roles = [...(user.roles ?? [])]
     } else {
       form.id = undefined
       form.name = ''
       form.email = ''
       form.password = ''
+      form.roles = []
     }
     setOpen(true)
   }
@@ -71,12 +97,20 @@
         form.name = newUser.name ?? ''
         form.email = newUser.email ?? ''
         form.password = ''
+        form.roles = [...(newUser.roles ?? [])]
       }
     },
     { immediate: true },
   )
 
   const toast = useToast()
+
+  const selectedRole = computed({
+    get: () => form.roles[0] ?? undefined,
+    set: (val: string | undefined) => {
+      form.roles = val ? [val] : []
+    },
+  })
 
   function onSubmit() {
     const isEdit = !!form.id
@@ -124,6 +158,10 @@
           :required="!form.id"
         />
       </UFormField>
+
+      <UFormField v-if="rolesOptions && rolesOptions.length > 0" :error="form.errors.roles || form.errors['roles.0']" label="Role" name="roles">
+        <USelect v-model="selectedRole" :items="rolesOptions" class="w-full" placeholder="Select a role" />
+      </UFormField>
     </form>
   </DefineFormTemplate>
 
@@ -140,7 +178,7 @@
   >
     <template #trigger>
       <slot name="trigger">
-        <UButton icon="i-lucide-plus" label="New user" @click="openModal()" />
+        <UButton v-if="hasPermission('create users')" icon="i-lucide-plus" label="New user" @click="openModal()" />
       </slot>
     </template>
     <ReuseFormTemplate />

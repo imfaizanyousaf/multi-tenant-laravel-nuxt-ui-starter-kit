@@ -1,13 +1,15 @@
 <script setup lang="ts">
+  import { useAuth } from '@/composables/useAuth'
   import { appearance } from '@/routes'
   import type { NavigationMenuItem } from '@nuxt/ui'
 
   const { url } = usePage()
   const toast = useToast()
+  const { hasPermission } = useAuth()
 
   const open = ref(false)
 
-  const links = [
+  const links = computed<NavigationMenuItem[][]>(() => [
     [
       {
         label: 'Home',
@@ -17,14 +19,30 @@
           open.value = false
         },
       },
-      {
-        label: 'Users',
-        icon: 'i-lucide-users',
-        to: '/users',
-        onSelect: () => {
-          open.value = false
-        },
-      },
+      ...(hasPermission('view users')
+        ? [
+            {
+              label: 'Users',
+              icon: 'i-lucide-users',
+              to: '/users',
+              onSelect: () => {
+                open.value = false
+              },
+            },
+          ]
+        : []),
+      ...(hasPermission('view roles')
+        ? [
+            {
+              label: 'Roles',
+              icon: 'i-lucide-shield-check',
+              to: '/roles',
+              onSelect: () => {
+                open.value = false
+              },
+            },
+          ]
+        : []),
       {
         label: 'Settings',
         to: '/settings',
@@ -85,13 +103,13 @@
         target: '_blank',
       },
     ],
-  ] satisfies NavigationMenuItem[][]
+  ])
 
   const groups = computed(() => [
     {
       id: 'links',
       label: 'Go to',
-      items: links.flat(),
+      items: links.value.flat(),
     },
     {
       id: 'code',

@@ -7,6 +7,8 @@ namespace App\Actions\User;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use function is_array;
+
 class UpdateUser
 {
     /**
@@ -24,6 +26,10 @@ class UpdateUser
         }
 
         $user->save();
+
+        if (isset($data['roles']) && is_array($data['roles'])) {
+            $user->syncRoles($data['roles']);
+        }
 
         return $user;
     }

@@ -19,7 +19,19 @@ export interface User {
   name: string
   email: string
   email_verified_at: string | null
+  roles?: string[]
+  permissions?: string[]
+  two_factor_enabled?: boolean
   avatar?: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Role {
+  id: number
+  name: string
+  guard_name: string
+  permissions: string[]
   created_at: string
   updated_at: string
 }

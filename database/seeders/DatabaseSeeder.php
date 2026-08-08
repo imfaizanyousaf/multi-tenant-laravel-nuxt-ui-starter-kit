@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+use function now;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +18,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(PermissionSeeder::class);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $admin = User::query()->firstOrCreate(['email' => 'admin@example.com'], [
+            'name' => 'Admin User',
+            'password' => 'password',
+            'email_verified_at' => now(),
         ]);
+
+        $admin->assignRole(Role::SUPER_ADMIN);
     }
 }

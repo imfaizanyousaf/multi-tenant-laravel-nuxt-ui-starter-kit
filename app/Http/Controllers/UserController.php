@@ -14,12 +14,15 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\DatatableResourceCollection;
 use App\Http\Resources\UserResource;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use function abort_unless;
 use function auth;
 use function back;
 
@@ -30,9 +33,25 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Users', [
-            'users' => UserResource::collection(User::query()->latest()->get())->resolve(),
-        ]);
+        Gate::authorize('viewAny', User::class);
+
+        return Inertia::render('Users');
+    }
+
+    /**
+     * Get available roles options for user creation/editing.
+     *
+     * @return array<int, string>
+     */
+    public function options(Request $request): array
+    {
+        abort_unless($request->user()?->canAny(['create users', 'update users']), 403);
+
+        return Role::query()
+            ->where('name', '!=', Role::SUPER_ADMIN)
+            ->pluck('name')
+            ->values()
+            ->all();
     }
 
     /**
@@ -40,6 +59,8 @@ class UserController extends Controller
      */
     public function table(Request $request, GetPaginatedUsers $getPaginatedUsers): DatatableResourceCollection
     {
+        Gate::authorize('viewAny', User::class);
+
         $users = $getPaginatedUsers->handle($request);
 
         return new DatatableResourceCollection($users, UserResource::class);
@@ -70,8 +91,14 @@ class UserController extends Controller
      */
     public function destroy(User $user, DeleteUser $deleteUser): RedirectResponse
     {
+        Gate::authorize('delete', $user);
+
         if ($user->id === auth()->id()) {
             return back()->withErrors(['user' => 'You cannot delete your own account.']);
+        }
+
+        if ($user->hasRole(Role::SUPER_ADMIN)) {
+            return back()->withErrors(['user' => 'The Super Admin account cannot be deleted.']);
         }
 
         $deleteUser->handle($user);
@@ -87,7 +114,7 @@ class UserController extends Controller
         /** @var array<int, string> $ids */
         $ids = $request->validated('ids');
 
-        $deleteBulkUsers->handle($ids, (string) auth()->id());
+        $deleteBulkUsers->handle($ids, (string) auth()->id(), true);
 
         return back();
     }

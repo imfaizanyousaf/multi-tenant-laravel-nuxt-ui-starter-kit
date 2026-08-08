@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User;
 
+use App\Models\Role;
 use App\Models\User;
+use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,7 +19,13 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $targetUser = $this->route('user');
+
+        if (! $targetUser instanceof User || $targetUser->hasRole(Role::SUPER_ADMIN)) {
+            return false;
+        }
+
+        return (bool) $this->user()?->can('update', $targetUser);
     }
 
     /**
@@ -34,6 +42,16 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required', 'string', 'min:2', 'max:50'],
             'email' => ['required', 'string', 'email:rfc,dns', 'min:5', 'max:254', Rule::unique(User::class)->ignore($targetUser->id)],
             'password' => ['nullable', 'string', Password::defaults()],
+            'roles' => ['nullable', 'array', 'max:1'],
+            'roles.*' => [
+                'string',
+                'exists:roles,name',
+                function (string $attribute, mixed $value, Closure $fail): void {
+                    if ($value === Role::SUPER_ADMIN) {
+                        $fail('The Super Admin role cannot be assigned.');
+                    }
+                },
+            ],
         ];
     }
 }

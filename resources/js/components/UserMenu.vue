@@ -7,13 +7,13 @@
     collapsed?: boolean
   }>()
 
-  const auth = useAuth()
+  const { user: authUser } = useAuth()
   const { getInitials } = useInitials()
 
   const user = computed(() => ({
-    name: auth.value.user.name,
+    name: authUser.value?.name ?? '',
     avatar: {
-      text: getInitials(auth.value.user.name),
+      text: getInitials(authUser.value?.name ?? ''),
     },
   }))
 
@@ -64,7 +64,7 @@
     <UButton
       v-bind="{
         ...user,
-        label: collapsed ? undefined : auth.user.name,
+        label: collapsed ? undefined : authUser?.name,
         trailingIcon: collapsed ? undefined : 'i-lucide-chevrons-up-down',
       }"
       color="neutral"

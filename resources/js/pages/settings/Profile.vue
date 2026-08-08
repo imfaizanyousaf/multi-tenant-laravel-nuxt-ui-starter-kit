@@ -23,11 +23,11 @@
   })
 
   type ProfileSchema = z.output<typeof profileSchema>
-  const auth = useAuth()
+  const { user } = useAuth()
 
   const profile = reactive<Partial<ProfileSchema>>({
-    name: auth.value.user.name,
-    email: auth.value.user.email,
+    name: user.value?.name ?? '',
+    email: user.value?.email ?? '',
     avatar: undefined,
   })
 
@@ -90,7 +90,7 @@
         <UFormField name="email" label="Email" required class="flex items-start justify-between gap-4 max-sm:flex-col">
           <template #description>
             <p class="text-muted">Used to sign in, for email receipts and product updates.</p>
-            <div v-if="mustVerifyEmail && !auth.user.email_verified_at">
+            <div v-if="mustVerifyEmail && !user?.email_verified_at">
               <p class="text-muted">
                 Your email address is unverified.
                 <TextLink :href="send()" as="button" class="text-sm font-medium text-primary">

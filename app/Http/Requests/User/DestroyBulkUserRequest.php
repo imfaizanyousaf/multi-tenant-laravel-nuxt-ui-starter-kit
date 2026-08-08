@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +15,7 @@ class DestroyBulkUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return (bool) $this->user()?->can('deleteBulk', User::class);
     }
 
     /**
@@ -25,8 +26,8 @@ class DestroyBulkUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'ids' => ['required', 'array'],
-            'ids.*' => ['string'],
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['required', 'string'],
         ];
     }
 }

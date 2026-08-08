@@ -13,7 +13,7 @@ test('security page is displayed', function (): void {
         'confirmPassword' => true,
     ]);
 
-    $user = User::factory()->withoutTwoFactor()->create();
+    $user = User::factory()->create();
 
     $response = $this
         ->withSession(['auth.password_confirmed_at' => time()])

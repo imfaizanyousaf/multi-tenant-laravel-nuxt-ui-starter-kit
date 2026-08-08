@@ -7,6 +7,8 @@ namespace App\Actions\User;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use function is_array;
+
 class CreateUser
 {
     /**
@@ -16,10 +18,16 @@ class CreateUser
      */
     public function handle(array $data): User
     {
-        return User::query()->create([
+        $user = User::query()->create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'] ?? 'password'),
         ]);
+
+        if (isset($data['roles']) && is_array($data['roles'])) {
+            $user->syncRoles($data['roles']);
+        }
+
+        return $user;
     }
 }

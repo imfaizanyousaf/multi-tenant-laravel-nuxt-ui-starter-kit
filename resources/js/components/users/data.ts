@@ -2,9 +2,6 @@ import { createDataTableConfig } from '@/components/app/DataTable/config'
 import type { BaseActionDefinition, BaseBulkActionDefinition } from '@/composables/useDataTableActions'
 import type { User } from '@/types'
 import type { DataTableColumn, DataTableConfig } from '@/types/datatable'
-import { h, resolveComponent } from 'vue'
-
-const UBadge = resolveComponent('UBadge')
 
 /**
  * Datatable default configuration (uses central defaults, override options here if needed)
@@ -21,25 +18,12 @@ export const columns: DataTableColumn<User>[] = [
     sortable: true,
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
-    sortable: true,
+    accessorKey: 'roles',
+    header: 'Role',
   },
   {
-    accessorKey: 'email_verified_at',
-    header: 'Status',
-    sortable: true,
-    cell: ({ row }) => {
-      const isVerified = !!row.original.email_verified_at
-      return h(
-        UBadge,
-        {
-          variant: 'subtle',
-          color: isVerified ? 'success' : 'neutral',
-        },
-        () => (isVerified ? 'Verified' : 'Unverified'),
-      )
-    },
+    accessorKey: 'two_factor_enabled',
+    header: '2FA',
   },
 ]
 

@@ -30,7 +30,7 @@ class GetPaginatedUsers
         $sort = $request->input('sort');
         $verified = $request->input('email_verified');
 
-        $query = User::query();
+        $query = User::query()->with('roles.permissions');
 
         // Search query
         if (! empty($search) && is_string($search)) {

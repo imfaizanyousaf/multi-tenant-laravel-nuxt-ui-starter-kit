@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Actions\User\DeleteBulkUsers;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -46,4 +47,29 @@ test('delete bulk users excludes current user id', function (): void {
     expect($deletedCount)->toBe(1);
     $this->assertDatabaseHas('users', ['id' => $admin->id]);
     $this->assertSoftDeleted($otherUser);
+});
+
+test('delete bulk users returns zero and deletes nothing when ids are not valid', function (): void {
+    $admin = User::factory()->create();
+    User::factory()->count(2)->create();
+
+    $action = new DeleteBulkUsers;
+    $deletedCount = $action->handle(['foo'], (string) $admin->id);
+
+    expect($deletedCount)->toBe(0);
+    expect(User::query()->count())->toBe(3);
+});
+
+test('delete bulk users excludes super admin users when requested', function (): void {
+    $admin = User::factory()->create();
+    $superAdminUser = User::factory()->create();
+    $superAdminUser->assignRole(Role::SUPER_ADMIN);
+    $regularUser = User::factory()->create();
+
+    $action = new DeleteBulkUsers;
+    $deletedCount = $action->handle([$superAdminUser->uuid, $regularUser->uuid], (string) $admin->id, true);
+
+    expect($deletedCount)->toBe(1);
+    $this->assertDatabaseHas('users', ['uuid' => $superAdminUser->uuid]);
+    $this->assertSoftDeleted($regularUser);
 });
