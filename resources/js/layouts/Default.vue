@@ -22,8 +22,9 @@
       ...(hasPermission('view users')
         ? [
             {
+              id: 'users',
               label: 'Users',
-              icon: 'i-lucide-users',
+              icon: 'i-heroicons-user-group',
               to: '/users',
               onSelect: () => {
                 open.value = false
@@ -34,9 +35,23 @@
       ...(hasPermission('view roles')
         ? [
             {
+              id: 'roles',
               label: 'Roles',
               icon: 'i-lucide-shield-check',
               to: '/roles',
+              onSelect: () => {
+                open.value = false
+              },
+            },
+          ]
+        : []),
+      ...(hasPermission('view tenants')
+        ? [
+            {
+              id: 'tenants',
+              label: 'Tenants',
+              icon: 'i-lucide-building-2',
+              to: '/tenants',
               onSelect: () => {
                 open.value = false
               },

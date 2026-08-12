@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
+use function database_path;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('testing')) {
+            $this->loadMigrationsFrom(database_path('migrations/landlord'));
+        }
+
         Gate::before(static fn (User $user, string $ability): ?true => $user->hasRole(Role::SUPER_ADMIN) ? true : null);
     }
 }

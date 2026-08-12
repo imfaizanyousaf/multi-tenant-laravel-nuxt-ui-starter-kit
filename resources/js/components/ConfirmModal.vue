@@ -9,7 +9,8 @@
     confirmText: string
     variant: 'link' | 'solid' | 'outline' | 'soft' | 'ghost' | 'subtle'
     color: 'neutral' | 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error'
-    onConfirm: () => Promise<boolean>
+    verificationText?: string
+    onConfirm: (verificationInput?: string) => Promise<boolean>
     onCancel: () => Promise<void>
   }
 
@@ -22,6 +23,7 @@
   const isLoading = ref(false)
   const activeButton = ref<'cancel' | 'confirm' | null>(null)
   const isDesktop = useMediaQuery('(min-width: 768px)')
+  const verificationInput = ref('')
 
   const handleConfirm = async () => {
     if (isLoading.value) return
@@ -30,7 +32,7 @@
     activeButton.value = 'confirm'
 
     try {
-      const result = await props.onConfirm()
+      const result = await props.onConfirm(verificationInput.value)
       if (result) {
         emit('close', true)
       } else {
@@ -63,13 +65,26 @@
 
 <template>
   <UModal v-if="isDesktop" :title="title" :description="description" :close="{ onClick: () => emit('close', false) }">
+    <template #body v-if="verificationText">
+      <p class="mb-3 text-sm">
+        Please type <strong class="text-foreground select-all">{{ verificationText }}</strong> to confirm.
+      </p>
+      <UInput v-model="verificationInput" :disabled="isLoading" class="w-full" placeholder="Type database name" />
+    </template>
+
     <template #footer>
       <div class="flex w-full justify-end gap-3">
         <UButton :disabled="isLoading" :loading="isLoading && activeButton === 'cancel'" color="neutral" variant="ghost" @click="handleCancel">
           {{ cancelText }}
         </UButton>
 
-        <UButton :disabled="isLoading" :loading="isLoading && activeButton === 'confirm'" :color="color" :variant="variant" @click="handleConfirm">
+        <UButton
+          :disabled="isLoading || (!!verificationText && verificationInput !== verificationText)"
+          :loading="isLoading && activeButton === 'confirm'"
+          :color="color"
+          :variant="variant"
+          @click="handleConfirm"
+        >
           {{ confirmText }}
         </UButton>
       </div>
@@ -77,13 +92,26 @@
   </UModal>
 
   <UDrawer v-else :title="title" :description="description" :close="{ onClick: () => emit('close', false) }">
+    <template #body v-if="verificationText">
+      <p class="mb-3 text-sm">
+        Please type <strong class="text-foreground select-all">{{ verificationText }}</strong> to confirm.
+      </p>
+      <UInput v-model="verificationInput" :disabled="isLoading" class="w-full" placeholder="Type database name" />
+    </template>
+
     <template #footer>
       <div class="flex w-full justify-end gap-3">
         <UButton :disabled="isLoading" :loading="isLoading && activeButton === 'cancel'" color="neutral" variant="ghost" @click="handleCancel">
           {{ cancelText }}
         </UButton>
 
-        <UButton :disabled="isLoading" :loading="isLoading && activeButton === 'confirm'" :color="color" :variant="variant" @click="handleConfirm">
+        <UButton
+          :disabled="isLoading || (!!verificationText && verificationInput !== verificationText)"
+          :loading="isLoading && activeButton === 'confirm'"
+          :color="color"
+          :variant="variant"
+          @click="handleConfirm"
+        >
           {{ confirmText }}
         </UButton>
       </div>

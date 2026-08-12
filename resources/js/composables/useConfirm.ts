@@ -7,11 +7,12 @@ export interface ConfirmOptions {
   confirmText?: string
   variant?: 'link' | 'solid' | 'outline' | 'soft' | 'ghost' | 'subtle'
   color?: 'neutral' | 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error'
+  verificationText?: string
   onCancel?: () => Promise<void>
-  onConfirm?: () => Promise<boolean>
+  onConfirm?: (verificationInput?: string) => Promise<boolean>
 }
 
-const defaultOptions: Required<ConfirmOptions> = {
+const defaultOptions: Required<Omit<ConfirmOptions, 'verificationText'>> & { verificationText?: string } = {
   title: 'Confirm Action',
   description: 'Are you sure you want to proceed?',
   cancelText: 'Cancel',
@@ -37,6 +38,7 @@ export function useConfirm() {
       confirmText: mergedOptions.confirmText,
       variant: mergedOptions.variant,
       color: mergedOptions.color,
+      verificationText: mergedOptions.verificationText,
       onConfirm: mergedOptions.onConfirm!,
       onCancel: mergedOptions.onCancel!,
     })

@@ -50,6 +50,10 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user() ? (new UserResource($request->user()))->resolve() : null,
             ],
+            'tenant' => [
+                'prefix' => config('multitenancy.tenant_database_prefix'),
+                'suffix' => config('multitenancy.tenant_database_suffix'),
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

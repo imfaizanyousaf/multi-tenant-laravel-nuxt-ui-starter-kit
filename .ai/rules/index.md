@@ -13,3 +13,4 @@ This index maps file glob patterns to area-grouped rules derived from the applic
 | `resources/js/**` | [frontend-confirmations.md](frontend-confirmations.md) | Programmatic Deletion Confirmations via `useConfirm()` |
 | `app/**`, `resources/js/**` | [roles-constants.md](roles-constants.md) | Single-Source Constants for Roles (`Role::SUPER_ADMIN`, `ROLE_SUPER_ADMIN`) |
 | `app/**`, `resources/js/**`, `tests/**` | [verification-quality.md](verification-quality.md) | Wayfinder, Pest (100% coverage), PHPStan, Pint & ESLint rules |
+| `app/Enums/**`, `app/Http/Resources/**` | [frontend-aware-enums.md](frontend-aware-enums.md) | Frontend-Aware Enums (`value`, `label`, `color`) |

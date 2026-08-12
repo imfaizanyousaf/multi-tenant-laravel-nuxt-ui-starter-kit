@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Role;
+use App\Models\Tenant;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
@@ -35,6 +36,11 @@ class SyncPermissionsCommand extends Command
             'update roles',
             'delete roles',
         ],
+        'Tenant' => [
+            'view tenants',
+            'create tenants',
+            'delete tenants',
+        ],
     ];
 
     /**
@@ -44,7 +50,16 @@ class SyncPermissionsCommand extends Command
     {
         app()->make(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        foreach ($this->permissionsMap as $permissions) {
+        $permissionsToSync = $this->permissionsMap;
+
+        if (Tenant::checkCurrent()) {
+            unset($permissionsToSync['Tenant']);
+
+            // Clean up any accidentally synced landlord-only permissions from tenant DBs
+            Permission::whereIn('name', $this->permissionsMap['Tenant'])->delete();
+        }
+
+        foreach ($permissionsToSync as $permissions) {
             foreach ($permissions as $permissionName) {
                 Permission::findOrCreate($permissionName, 'web');
             }
