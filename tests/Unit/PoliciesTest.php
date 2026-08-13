@@ -142,4 +142,13 @@ test('tenant policy enforces permissions', function (): void {
         ->and($policy->update($plainUser, $tenant))->toBeFalse()
         ->and($policy->restore($plainUser, $tenant))->toBeFalse()
         ->and($policy->forceDelete($plainUser, $tenant))->toBeFalse();
+
+    $creatingTenant = Tenant::query()->create([
+        'name' => 'Creating Inc',
+        'domain' => 'creating.'.config('app.domain'),
+        'database' => config('multitenancy.tenant_database_prefix').'creating',
+        'status' => TenantStatus::CREATING,
+    ]);
+
+    expect($policy->delete($superAdmin, $creatingTenant))->toBeFalse();
 });

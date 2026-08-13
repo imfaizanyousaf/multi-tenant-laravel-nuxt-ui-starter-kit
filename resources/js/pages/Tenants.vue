@@ -21,6 +21,7 @@
   const rowActions = computed(() => {
     const actions = createActions(baseRowActions, {
       delete: {
+        visible: (row: any) => row.original.status.value !== 'creating',
         onClick: (row: any) => {
           confirm({
             title: 'Delete Tenant',

@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
 
+/**
+ * @property TenantStatus $status
+ */
 #[Fillable(['name', 'domain', 'database', 'status'])]
 class Tenant extends SpatieTenant
 {

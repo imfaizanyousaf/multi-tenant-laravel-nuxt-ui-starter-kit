@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Enums\TenantStatus;
 use App\Models\Tenant;
 use App\Models\User;
 
@@ -46,7 +47,7 @@ class TenantPolicy
      */
     public function delete(User $user, Tenant $tenant): bool
     {
-        return $user->can('delete tenants');
+        return $user->can('delete tenants') && $tenant->status !== TenantStatus::CREATING;
     }
 
     /**
