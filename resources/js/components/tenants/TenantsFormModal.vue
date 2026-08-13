@@ -79,8 +79,8 @@
       preserveScroll: true,
       onSuccess: () => {
         toast.add({
-          title: 'Tenant creation started',
-          description: 'Tenant creation process has been started. You will be notified when it is completed.',
+          title: 'Tenant Creation Started',
+          description: 'The status will be updated once the process is complete.',
           color: 'info',
         })
         resetForm()

@@ -111,6 +111,7 @@
     getFilters: () => context.dynamicFilters.value,
     refresh: context.refresh,
     clearSelection: context.clearSelection,
+    data,
   })
 </script>
 

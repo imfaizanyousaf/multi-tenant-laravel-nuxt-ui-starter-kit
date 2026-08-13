@@ -9,6 +9,7 @@
   import Layout from '@/layouts/Default.vue'
   import { router } from '@inertiajs/vue3'
   import { computed, ref } from 'vue'
+  import { useIntervalFn } from '@vueuse/core'
 
   defineOptions({ layout: Layout })
 
@@ -68,6 +69,14 @@
   function handleRefresh() {
     dataTable.value?.refresh()
   }
+
+  useIntervalFn(() => {
+    if (!dataTable.value?.data) return
+    const hasCreating = dataTable.value.data.some((tenant: any) => tenant.status.value === 'creating')
+    if (hasCreating) {
+      handleRefresh()
+    }
+  }, 5000)
 </script>
 
 <template>
