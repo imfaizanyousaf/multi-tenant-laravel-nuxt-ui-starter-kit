@@ -25,6 +25,11 @@ export const columns: DataTableColumn<any>[] = [
     header: 'Database',
     sortable: true,
   },
+  {
+    accessorKey: 'created_at',
+    header: 'Created At',
+    sortable: true,
+  },
 ]
 
 export const baseRowActions: BaseActionDefinition[] = [

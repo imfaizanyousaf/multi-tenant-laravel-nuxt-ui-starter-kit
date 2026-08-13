@@ -119,6 +119,19 @@
             {{ row.original.status.label }}
           </UBadge>
         </template>
+        <template #created_at-cell="{ row }">
+          <span class="text-gray-500 dark:text-gray-400">
+            {{
+              new Date(row.original.created_at).toLocaleString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+              })
+            }}
+          </span>
+        </template>
       </DataTable>
     </template>
   </UDashboardPanel>
