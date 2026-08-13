@@ -28,7 +28,7 @@ test('users with view tenants permission can view the tenants page and table', f
     $role->givePermissionTo('view tenants');
     $user = User::factory()->create();
     $user->assignRole($role);
-    Tenant::create([
+    Tenant::query()->create([
         'name' => 'Acme Inc',
         'domain' => 'acme.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'acme',
@@ -50,13 +50,13 @@ test('super admin can fetch paginated tenants with search and sorting', function
     $admin = User::factory()->create();
     $admin->assignRole(Role::SUPER_ADMIN);
 
-    $acme = Tenant::create([
+    $acme = Tenant::query()->create([
         'name' => 'Acme Inc',
         'domain' => 'acme.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'acme',
         'status' => TenantStatus::ACTIVE,
     ]);
-    Tenant::create([
+    Tenant::query()->create([
         'name' => 'Globex Corp',
         'domain' => 'globex.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'globex',
@@ -157,7 +157,7 @@ test('users without create tenants permission cannot create tenants', function (
 test('super admin can delete a tenant with the correct confirmation', function (): void {
     $admin = User::factory()->create();
     $admin->assignRole(Role::SUPER_ADMIN);
-    $tenant = Tenant::create([
+    $tenant = Tenant::query()->create([
         'name' => 'Acme Inc',
         'domain' => 'acme.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'acme',
@@ -185,7 +185,7 @@ test('users without delete tenants permission cannot delete tenants', function (
     $role->givePermissionTo('view tenants');
     $user = User::factory()->create();
     $user->assignRole($role);
-    $tenant = Tenant::create([
+    $tenant = Tenant::query()->create([
         'name' => 'Acme Inc',
         'domain' => 'acme.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'acme',

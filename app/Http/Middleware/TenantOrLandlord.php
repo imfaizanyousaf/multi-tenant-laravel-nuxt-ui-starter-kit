@@ -6,12 +6,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Multitenancy\Models\Tenant;
 
-use function abort;
 use function abort_unless;
 use function config;
 use function in_array;
+use function to_route;
 
 class TenantOrLandlord
 {
@@ -29,7 +30,11 @@ class TenantOrLandlord
             if (! $request->session()->has('tenant_id')) {
                 $request->session()->put('tenant_id', $tenantId);
             } elseif ($request->session()->get('tenant_id') !== $tenantId) {
-                abort(401, 'Invalid tenant session.');
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return to_route('login');
             }
         }
 

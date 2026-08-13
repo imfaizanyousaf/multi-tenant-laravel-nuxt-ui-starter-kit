@@ -19,6 +19,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 
 use function back;
+use function config;
 
 class TenantController extends Controller
 {
@@ -26,7 +27,12 @@ class TenantController extends Controller
     {
         Gate::authorize('viewAny', Tenant::class);
 
-        return Inertia::render('Tenants');
+        return Inertia::render('Tenants', [
+            'tenant' => [
+                'prefix' => config('multitenancy.tenant_database_prefix'),
+                'suffix' => config('multitenancy.tenant_database_suffix'),
+            ],
+        ]);
     }
 
     public function table(Request $request, GetPaginatedTenants $getPaginatedTenants): DatatableResourceCollection

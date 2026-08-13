@@ -56,7 +56,7 @@ class SyncPermissionsCommand extends Command
             unset($permissionsToSync['Tenant']);
 
             // Clean up any accidentally synced landlord-only permissions from tenant DBs
-            Permission::whereIn('name', $this->permissionsMap['Tenant'])->delete();
+            Permission::query()->whereIn('name', $this->permissionsMap['Tenant'])->delete();
         }
 
         foreach ($permissionsToSync as $permissions) {

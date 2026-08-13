@@ -25,7 +25,6 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         config(['database.default' => $tenantConnectionName]);
 
         DB::purge($tenantConnectionName);
-        DB::purge(config('multitenancy.landlord_database_connection_name'));
     }
 
     public function forgetCurrent(): void
@@ -37,6 +36,5 @@ class SwitchTenantDatabaseTask implements SwitchTenantTask
         config(['database.default' => $landlordConnectionName]);
 
         DB::purge($tenantConnectionName);
-        DB::purge($landlordConnectionName);
     }
 }

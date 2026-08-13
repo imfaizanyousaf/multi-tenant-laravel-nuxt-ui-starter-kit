@@ -113,7 +113,7 @@ test('tenant policy enforces permissions', function (): void {
 
     $plainUser = User::factory()->create();
 
-    $tenant = Tenant::create([
+    $tenant = Tenant::query()->create([
         'name' => 'Acme Inc',
         'domain' => 'acme.'.config('app.domain'),
         'database' => config('multitenancy.tenant_database_prefix').'acme',
