@@ -21,23 +21,53 @@ Perfect for MVPs, SaaS applications, internal tools, or any Laravel project need
 
 ## Installation
 
-### Clone Repository (Without Tenancy)
+The kit is maintained on two branches:
+
+| Branch    | Description                                                                                                                      |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `main`    | The full starter kit (auth, roles & permissions, sample pages) without multi-tenancy                                             |
+| `tenancy` | Everything in `main` plus multi-tenancy powered by [spatie/laravel-multitenancy](https://spatie.be/docs/laravel-multitenancy/v4) |
+
+### Using It Without Multi-Tenancy
 
 ```bash
-git clone https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
+git clone https://github.com/imfaizanyousaf/multi-tenant-laravel-nuxt-ui-starter-kit.git my-app
 cd my-app
 composer setup
 composer run dev
 ```
 
-### Clone Repository (With Tenancy)
+### Using It With Multi-Tenancy
 
 ```bash
-git clone -b tenancy https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
+git clone -b tenancy https://github.com/imfaizanyousaf/multi-tenant-laravel-nuxt-ui-starter-kit.git my-app
 cd my-app
 composer setup
 composer run dev
 ```
+
+#### How Multi-Tenancy Works
+
+- Uses a **landlord/tenant database** setup — the default connection in `.env` is `landlord`, and each tenant gets its own database.
+- Tenants are resolved **by domain** (`DomainTenantFinder`): a request to `acme.your-app.test` loads the tenant whose `domain` matches. Point a local wildcard DNS/hosts entry at your dev server to reach tenant domains.
+- `composer setup` runs the landlord migrations first, then the application migrations and seeders.
+- Create tenants from the **Tenants** page in the dashboard (requires the `view tenants` permission). A queued job then creates, migrates, and seeds the tenant database automatically.
+- Queued jobs are tenant-aware by default, and switch tasks handle the tenant database, cache prefix, and route cache on every tenant switch.
+
+#### Commonly Used Commands
+
+```bash
+# Run landlord (central) migrations
+php artisan migrate --path=database/migrations/landlord --database=landlord
+
+# Run an Artisan command for every tenant
+php artisan tenants:artisan "migrate --database=tenant --seed"
+
+# Run an Artisan command for specific tenant(s)
+php artisan tenants:artisan "migrate --database=tenant" --tenant=1 --tenant=2
+```
+
+For tenant finders, switch tasks, tenant-aware queues, and everything else, see the [official spatie/laravel-multitenancy documentation](https://spatie.be/docs/laravel-multitenancy/v4).
 
 ## Quick Start
 
@@ -114,7 +144,7 @@ For more details, see the [official documentation](https://spatie.be/docs/larave
 
 ### Backend Features
 
-- **Laravel 12** with modern PHP 8.2+ features
+- *_Laravel 13_ with modern PHP 8.2+ features
 - **Laravel Wayfinder** for type-safe routing between Laravel and Vue
 - **Laravel Horizon** for queue monitoring and management
 - **Database queue driver** configured by default
@@ -441,8 +471,7 @@ npm run format:check
 
 ### Backend
 
-- Laravel 12
-- PHP 8.2+
+- Laravel 13- PHP 8.2+
 - Inertia.js Laravel adapter v2
 - Laravel Fortify (authentication)
 - Laravel Horizon (queue monitoring)
