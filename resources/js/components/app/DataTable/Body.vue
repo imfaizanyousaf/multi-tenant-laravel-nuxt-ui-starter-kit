@@ -24,6 +24,7 @@
   const UCheckbox = resolveComponent('UCheckbox')
   const UButton = resolveComponent('UButton')
   const UDropdownMenu = resolveComponent('UDropdownMenu')
+  const UTooltip = resolveComponent('UTooltip')
   const UTable = resolveComponent('UTable')
 
   const attrs = useAttrs()
@@ -174,30 +175,52 @@
 
           if (visibleActions.length === 0) return null
 
-          const actionItems = visibleActions.map((action) => ({
-            label: action.label,
-            icon: action.icon,
-            color: action.color,
-            disabled: typeof action.disabled === 'function' ? action.disabled(row) : action.disabled,
-            onSelect: () => action.onClick(row),
-          }))
+          const isDisabled = (action: DataTableAction<T>) => (typeof action.disabled === 'function' ? action.disabled(row) : action.disabled)
+
+          if (visibleActions.length > 2) {
+            const actionItems = visibleActions.map((action) => ({
+              label: action.label,
+              icon: action.icon,
+              color: action.color,
+              disabled: isDisabled(action),
+              onSelect: () => action.onClick(row),
+            }))
+
+            return h(
+              'div',
+              { class: 'text-center' },
+              h(
+                UDropdownMenu,
+                {
+                  content: { align: 'end' },
+                  items: actionItems,
+                },
+                () =>
+                  h(UButton, {
+                    icon: 'i-lucide-ellipsis-vertical',
+                    color: 'neutral',
+                    variant: 'ghost',
+                    class: 'ml-auto',
+                  }),
+              ),
+            )
+          }
 
           return h(
             'div',
-            { class: 'text-center' },
-            h(
-              UDropdownMenu,
-              {
-                content: { align: 'end' },
-                items: actionItems,
-              },
-              () =>
+            { class: 'flex items-center justify-center gap-1' },
+            visibleActions.map((action) =>
+              h(UTooltip, { text: action.label, content: { sideOffset: 10 } }, () =>
                 h(UButton, {
-                  icon: 'i-lucide-ellipsis-vertical',
-                  color: 'neutral',
-                  variant: 'ghost',
-                  class: 'ml-auto',
+                  color: action.color ?? 'neutral',
+                  variant: action.variant ?? 'ghost',
+                  size: 'sm',
+                  icon: action.icon,
+                  label: action.icon ? undefined : action.label,
+                  disabled: isDisabled(action),
+                  onClick: () => action.onClick(row),
                 }),
+              ),
             ),
           )
         },
