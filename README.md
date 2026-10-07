@@ -144,7 +144,7 @@ For more details, see the [official documentation](https://spatie.be/docs/larave
 
 ### Backend Features
 
-- *_Laravel 13_ with modern PHP 8.2+ features
+- **Laravel 13** with modern PHP 8.2+ features
 - **Laravel Wayfinder** for type-safe routing between Laravel and Vue
 - **Laravel Horizon** for queue monitoring and management
 - **Database queue driver** configured by default
@@ -471,7 +471,8 @@ npm run format:check
 
 ### Backend
 
-- Laravel 13- PHP 8.2+
+- Laravel 13
+- PHP 8.2+
 - Inertia.js Laravel adapter v2
 - Laravel Fortify (authentication)
 - Laravel Horizon (queue monitoring)
