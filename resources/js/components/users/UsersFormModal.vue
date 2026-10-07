@@ -159,7 +159,7 @@
         />
       </UFormField>
 
-      <UFormField v-if="rolesOptions && rolesOptions.length > 0" :error="form.errors.roles || form.errors['roles.0']" label="Role" name="roles">
+      <UFormField :error="form.errors.roles || form.errors['roles.0']" label="Role" name="roles">
         <USelect v-model="selectedRole" :items="rolesOptions" class="w-full" placeholder="Select a role" />
       </UFormField>
     </form>
