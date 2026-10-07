@@ -1,6 +1,8 @@
-# Laravel Nuxt UI Starter Kit
+# Multi-Tenant Laravel Nuxt UI Starter Kit
 
-A production-ready Laravel 12 starter kit with Vue 3, Inertia.js v2, Nuxt UI components, and Tailwind CSS v4. Built for developers who want to start their next web application with modern tools and best practices already configured.
+This is a fork of [Laravel Nuxt UI Starter Kit ](https://github.com/jkque/laravel-nuxt-ui-starter-kit) but activly maintained and supports multi tenancy
+
+A production-ready Laravel starter kit with Vue 3, Inertia.js, Nuxt UI components, and Tailwind CSS v4. Built for developers who want to start their next web application with modern tools and best practices already configured.
 
 ## Why Use This Starter Kit?
 
@@ -9,6 +11,7 @@ Skip the repetitive setup and start building features immediately. This starter 
 - **Zero Configuration**: Everything is pre-configured and ready to use
 - **Best Practices**: Modern architecture patterns and coding standards built-in
 - **Full Authentication**: Complete auth system you can customize or use as-is
+- **Roles & Permissions**: Role-based access control pre-built with `spatie/laravel-permission`
 - **Beautiful UI**: Nuxt UI component library with Tailwind CSS v4
 - **Type Safety**: TypeScript on frontend, PHP 8.2+ with strict types on backend
 - **Developer Tools**: Testing, linting, formatting, and quality checks ready to go
@@ -18,44 +21,19 @@ Perfect for MVPs, SaaS applications, internal tools, or any Laravel project need
 
 ## Installation
 
-### Via Laravel Installer
-
-You may create a new project using the [Laravel installer](https://laravel.com/docs/12.x/installation#creating-a-laravel-project):
+### Clone Repository (Without Tenancy)
 
 ```bash
-laravel new my-app --using=jkque/laravel-nuxt-ui-starter-kit
-```
-
-### Via Composer
-
-Or, you can create a new project using Composer's `create-project` command:
-
-```bash
-composer create-project jkque/laravel-nuxt-ui-starter-kit my-app
-```
-
-After creating the project, start the development server:
-
-```bash
+git clone https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
 cd my-app
+composer setup
 composer run dev
 ```
 
-This will:
-- Install all PHP and JavaScript dependencies
-- Set up your environment configuration
-- Run database migrations
-- Build frontend assets
-- Start Laravel server, queue worker, logs viewer, and Vite dev server
-
-Your application will be available at `http://localhost:8000`.
-
-### Alternative: Clone Repository
-
-You can also clone this repository directly:
+### Clone Repository (With Tenancy)
 
 ```bash
-git clone https://github.com/jkque/laravel-nuxt-ui-starter-kit.git my-app
+git clone -b tenancy https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
 cd my-app
 composer setup
 composer run dev
@@ -72,6 +50,7 @@ Once installed, you can immediately:
 5. **Start building** your features using the included components and patterns
 
 The starter kit includes:
+
 - Pre-built authentication pages (login, register, password reset, 2FA)
 - Dashboard with example layouts and components
 - Settings pages demonstrating forms and user preferences
@@ -83,6 +62,7 @@ The starter kit includes:
 This starter kit comes with everything you need to build modern web applications:
 
 ### Authentication & Authorization
+
 - Complete authentication system powered by Laravel Fortify
 - Login, registration, and email verification
 - Password reset functionality
@@ -90,7 +70,31 @@ This starter kit comes with everything you need to build modern web applications
 - Email verification
 - Password confirmation for sensitive actions
 
+### Roles & Permissions
+
+Role-based access control powered by [spatie/laravel-permission](https://spatie.be/docs/laravel-permission):
+
+- `HasRoles` trait on the `User` model
+- Custom `Role` model with a protected `Super Admin` role that bypasses all checks via `Gate::before`
+- CRUD UIs for managing users and roles (`resources/js/pages/Users.vue`, `resources/js/pages/Roles.vue`)
+- Policies (`UserPolicy`, `RolePolicy`) enforced with `Gate::authorize()`
+- Route middleware aliases registered: `role`, `permission`, `role_or_permission`
+- Permissions seeded automatically by `PermissionSeeder` during `php artisan db:seed`
+
+#### Useful Artisan Commands
+
+```bash
+# Reset the permission cache (required after manual DB changes to roles/permissions)
+php artisan permission:cache-reset
+
+# Sync application permissions into the database and assign them to the Super Admin role
+php artisan permissions:sync
+```
+
+For more details, see the [official documentation](https://spatie.be/docs/laravel-permission/v8/basic-usage/artisan).
+
 ### Frontend Stack
+
 - **Vue 3** with TypeScript support
 - **Inertia.js v2** for seamless SPA experience without API complexity
 - **Nuxt UI** component library for beautiful, accessible UI components
@@ -100,6 +104,7 @@ This starter kit comes with everything you need to build modern web applications
 - Server-Side Rendering (SSR) support with Inertia
 
 ### Sample Application Pages
+
 - Welcome/landing page
 - Dashboard with example UI
 - Customer management page
@@ -108,6 +113,7 @@ This starter kit comes with everything you need to build modern web applications
 - Complete authentication flow pages
 
 ### Backend Features
+
 - **Laravel 12** with modern PHP 8.2+ features
 - **Laravel Wayfinder** for type-safe routing between Laravel and Vue
 - **Laravel Horizon** for queue monitoring and management
@@ -116,6 +122,7 @@ This starter kit comes with everything you need to build modern web applications
 - Session and cache management
 
 ### Developer Experience
+
 - **Pest PHP** testing framework with 100% coverage requirements
 - **PHPStan** for static analysis
 - **Laravel Pint** for PHP code formatting
@@ -127,6 +134,7 @@ This starter kit comes with everything you need to build modern web applications
 - **Laravel Sail** Docker environment included
 
 ### Code Quality Tools
+
 - Automated code formatting and linting
 - 100% test coverage enforcement
 - 100% type coverage requirements
@@ -226,10 +234,17 @@ composer run dev
 ```
 
 This concurrently runs:
+
 - Laravel development server (port 8000)
 - Queue worker
 - Log viewer (Laravel Pail)
 - Vite dev server (hot module replacement)
+
+You can also run using this laravel's dev command
+
+````bash
+php artisan dev
+```
 
 ### Individual Services
 
@@ -247,7 +262,7 @@ php artisan queue:listen
 
 # Log viewer
 php artisan pail
-```
+````
 
 ### Server-Side Rendering (SSR)
 
@@ -310,6 +325,7 @@ composer test
 ```
 
 This runs:
+
 - Type coverage analysis (requires 100%)
 - Unit and feature tests with coverage (requires 100% coverage)
 - Code style checks (Pint, Rector, Prettier)
@@ -424,6 +440,7 @@ npm run format:check
 ## Technology Stack
 
 ### Backend
+
 - Laravel 12
 - PHP 8.2+
 - Inertia.js Laravel adapter v2
@@ -432,6 +449,7 @@ npm run format:check
 - Laravel Wayfinder (routing)
 
 ### Frontend
+
 - Vue 3
 - Inertia.js v2
 - Tailwind CSS v4
@@ -440,6 +458,7 @@ npm run format:check
 - Vite
 
 ### Development Tools
+
 - Pest (testing framework)
 - Laravel Pint (code formatter)
 - PHPStan (static analysis)
