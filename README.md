@@ -581,6 +581,7 @@ chmod -R 775 storage bootstrap/cache
 - [Tailwind CSS Documentation](https://tailwindcss.com/)
 - [Nuxt UI Documentation](https://ui.nuxt.com/)
 - [Pest Documentation](https://pestphp.com/)
+- [![Why PHP](https://img.shields.io/badge/Why_PHP-in_2026-7A86E8?style=flat&labelColor=18181b)](https://whyphp.dev)
 
 ## License
 
