@@ -1,6 +1,6 @@
 {
   "$schema": "https://getcomposer.org/schema.json",
-  "name": "jkque/laravel-nuxt-ui-starter-kit",
+  "name": "imfaizanyousaf/multi-tenant-laravel-nuxt-ui-starter-kit",
   "type": "project",
   "description": "A production-ready Laravel 12 starter kit with Vue 3, Inertia.js v2, Nuxt UI components, and Tailwind CSS v4. Complete authentication, beautiful UI components, and modern developer tools included.",
   "keywords": [
