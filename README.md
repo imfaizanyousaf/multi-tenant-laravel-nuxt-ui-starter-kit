@@ -1,6 +1,6 @@
 # Multi-Tenant Laravel Nuxt UI Starter Kit
 
-This is a fork of [Laravel Nuxt UI Starter Kit ](https://github.com/jkque/laravel-nuxt-ui-starter-kit) but activly maintained and supports multi tenancy
+This is a fork of [Laravel Nuxt UI Starter Kit ](https://github.com/jkque/laravel-nuxt-ui-starter-kit) but supports Multi-Tenancy, Roles and Permissions
 
 A production-ready Laravel starter kit with Vue 3, Inertia.js, Nuxt UI components, and Tailwind CSS v4. Built for developers who want to start their next web application with modern tools and best practices already configured.
 
