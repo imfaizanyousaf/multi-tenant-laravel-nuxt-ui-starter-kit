@@ -24,7 +24,7 @@ Perfect for MVPs, SaaS applications, internal tools, or any Laravel project need
 ### Clone Repository (Without Tenancy)
 
 ```bash
-git clone https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
+git clone https://github.com/imfaizanyousaf/multi-tenant-laravel-nuxt-ui-starter-kit.git my-app
 cd my-app
 composer setup
 composer run dev
@@ -33,7 +33,7 @@ composer run dev
 ### Clone Repository (With Tenancy)
 
 ```bash
-git clone -b tenancy https://github.com/imfaizanyousaf/starter-kit-laravel.git my-app
+git clone -b tenancy https://github.com/imfaizanyousaf/multi-tenant-laravel-nuxt-ui-starter-kit.git my-app
 cd my-app
 composer setup
 composer run dev
