@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\User;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 use function is_array;
 
-class UpdateUser
+final readonly class UpdateUser
 {
     /**
      * Update an existing user record.
@@ -18,19 +18,25 @@ class UpdateUser
      */
     public function handle(User $user, array $data): User
     {
-        $user->name = $data['name'];
-        $user->email = $data['email'];
+        return DB::transaction(function () use ($user, $data): User {
+            $user->name = $data['name'];
+            $user->email = $data['email'];
 
-        if (! empty($data['password'])) {
-            $user->password = Hash::make($data['password']);
-        }
+            if ($user->isDirty('email')) {
+                $user->email_verified_at = null;
+            }
 
-        $user->save();
+            if (! empty($data['password'])) {
+                $user->password = $data['password'];
+            }
 
-        if (isset($data['roles']) && is_array($data['roles'])) {
-            $user->syncRoles($data['roles']);
-        }
+            $user->save();
 
-        return $user;
+            if (isset($data['roles']) && is_array($data['roles'])) {
+                $user->syncRoles($data['roles']);
+            }
+
+            return $user;
+        });
     }
 }

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-  import { options, store, update } from '@/actions/App/Http/Controllers/RoleController'
+  import { store, update } from '@/actions/App/Http/Controllers/RoleController'
+  import options from '@/actions/App/Http/Controllers/RoleOptionsController'
   import { ROLE_SUPER_ADMIN } from '@/constants/roles'
   import AlertError from '@/components/AlertError.vue'
   import DialogForm from '@/components/app/DialogForm.vue'
@@ -60,10 +61,15 @@
     emit('update:open', val)
   }
 
-  const form = useForm({
-    id: undefined as number | undefined,
+  const form = useForm<{
+    id?: number
+    name: string
+    permissions: string[]
+    role?: string
+  }>({
+    id: undefined,
     name: '',
-    permissions: [] as string[],
+    permissions: [],
   })
 
   function resetForm() {
@@ -160,7 +166,7 @@
     <template #footer>
       <div class="mt-8 mb-4 flex w-full flex-col gap-4 md:mt-0 md:mb-0 md:flex-row-reverse md:gap-2">
         <UButton
-          :disabled="!form.isDirty"
+          :disabled="!form.isDirty || form.processing"
           form="role-form"
           :label="form.id ? 'Update' : 'Create'"
           :loading="form.processing"

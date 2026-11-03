@@ -11,7 +11,7 @@ use Illuminate\Support\ServiceProvider;
 
 use function database_path;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.

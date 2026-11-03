@@ -6,7 +6,7 @@ namespace App\Actions\Role;
 
 use App\Models\Role;
 
-class DeleteBulkRoles
+final readonly class DeleteBulkRoles
 {
     /**
      * Delete multiple roles by IDs.

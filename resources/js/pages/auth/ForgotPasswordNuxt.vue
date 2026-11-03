@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { store } from '@/actions/App/Http/Controllers/Auth/PasswordResetLinkController'
   import Layout from '@/layouts/AuthBasic.vue'
+  import { login } from '@/routes'
   import { router } from '@inertiajs/vue3'
   import type { FormSubmitEvent } from '@nuxt/ui'
   import * as z from 'zod'
@@ -59,6 +60,6 @@
       </div>
     </template>
 
-    <template #footer> Or, return to <ULink to="/login" class="font-medium text-primary">log in</ULink>. </template>
+    <template #footer> Or, return to <ULink :to="login.url()" class="font-medium text-primary">log in</ULink>. </template>
   </UAuthForm>
 </template>

@@ -79,7 +79,9 @@ test('user policy enforces super admin guards and permissions', function (): voi
         ->and($policy->delete($superAdmin, $superAdmin))->toBeFalse()
         ->and($policy->deleteBulk($superAdmin))->toBeTrue()
         ->and($policy->restore($superAdmin, $target))->toBeTrue()
-        ->and($policy->forceDelete($superAdmin, $target))->toBeTrue();
+        ->and($policy->restore($superAdmin, $superAdmin))->toBeFalse()
+        ->and($policy->forceDelete($superAdmin, $target))->toBeTrue()
+        ->and($policy->forceDelete($superAdmin, $superAdmin))->toBeFalse();
 
     expect($policy->viewAny($manager))->toBeTrue()
         ->and($policy->view($manager, $target))->toBeTrue()

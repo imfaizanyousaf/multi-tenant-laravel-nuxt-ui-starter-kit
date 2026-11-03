@@ -15,7 +15,7 @@ use function config;
 use function dispatch_sync;
 use function now;
 
-class DatabaseSeeder extends Seeder
+final class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { destroy, destroyBulk, table } from '@/actions/App/Http/Controllers/UserController'
+  import { destroy } from '@/actions/App/Http/Controllers/UserController'
+  import { destroy as destroyBulk } from '@/actions/App/Http/Controllers/UserBulkDeletionController'
+  import table from '@/actions/App/Http/Controllers/UserTableController'
   import DataTable from '@/components/app/DataTable/Index.vue'
   import { baseBulkActions, baseRowActions, columns, config } from '@/components/users/data'
   import ColumnName from '@/components/users/datatable/ColumnName.vue'

@@ -11,7 +11,7 @@ use Spatie\Permission\Models\Role;
 /**
  * @mixin Role
  */
-class RoleResource extends JsonResource
+final class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

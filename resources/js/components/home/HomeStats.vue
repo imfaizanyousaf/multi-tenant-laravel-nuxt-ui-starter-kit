@@ -76,11 +76,10 @@
 <template>
   <UPageGrid class="gap-4 sm:gap-6 lg:grid-cols-4 lg:gap-px">
     <UPageCard
-      v-for="(stat, index) in stats"
-      :key="index"
+      v-for="stat in stats"
+      :key="stat.title"
       :icon="stat.icon"
       :title="stat.title"
-      to="/customers"
       variant="subtle"
       :ui="{
         container: 'gap-y-1.5',

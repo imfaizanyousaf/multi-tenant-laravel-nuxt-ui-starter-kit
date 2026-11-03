@@ -16,7 +16,7 @@ use function app;
 
 #[Signature('permissions:sync')]
 #[Description('Sync application model permissions into database and assign to Super Admin role')]
-class SyncPermissionsCommand extends Command
+final class SyncPermissionsCommand extends Command
 {
     /**
      * Map of models/modules to their permissions.

@@ -7,7 +7,7 @@ namespace App\Policies;
 use App\Models\Role;
 use App\Models\User;
 
-class RolePolicy
+final class RolePolicy
 {
     /**
      * Determine whether the user can view any roles.
@@ -31,6 +31,14 @@ class RolePolicy
     public function create(User $user): bool
     {
         return $user->can('create roles');
+    }
+
+    /**
+     * Determine whether the user can view role options.
+     */
+    public function viewOptions(User $user): bool
+    {
+        return $user->canAny(['create roles', 'update roles']);
     }
 
     /**

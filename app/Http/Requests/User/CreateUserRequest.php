@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Requests\User;
+
+use App\Models\Role;
+use App\Models\User;
+use Closure;
+use Illuminate\Auth\Access\Response;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
+
+final class CreateUserRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): Response
+    {
+        return $this->user()?->can('create', User::class)
+            ? Response::allow()
+            : Response::deny();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'name' => ['required', 'string', 'min:2', 'max:50'],
+            'email' => ['required', 'string', 'email:rfc,dns', 'min:5', 'max:254', 'unique:'.User::class],
+            'password' => ['nullable', 'string', Password::defaults()],
+            'roles' => ['nullable', 'array', 'max:1'],
+            'roles.*' => [
+                'string',
+                'exists:roles,name',
+                function (string $attribute, mixed $value, Closure $fail): void {
+                    if ($value === Role::SUPER_ADMIN) {
+                        $fail('The '.Role::SUPER_ADMIN.' role cannot be assigned.');
+                    }
+                },
+            ],
+        ];
+    }
+}

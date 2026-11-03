@@ -1,23 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Actions\Auth\CreateRegistration;
+use App\Http\Requests\Auth\CreateRegistrationRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
-use function event;
 use function to_route;
 
-class RegisteredUserController extends Controller
+final class RegisteredUserController
 {
     /**
      * Show the registration page.
@@ -29,24 +25,10 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
-     * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CreateRegistrationRequest $request, CreateRegistration $createRegistration): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:50'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'min:5', 'max:254', 'unique:'.User::class],
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $user = User::query()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
+        $user = $createRegistration->handle($request->validated());
 
         Auth::login($user);
 

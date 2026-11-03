@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Layout from '@/layouts/Default.vue'
+  import { users } from '@/routes'
   import type { Period, Range } from '@/types'
   import type { DropdownMenuItem } from '@nuxt/ui'
   import { sub } from 'date-fns'
@@ -14,12 +15,14 @@
       {
         label: 'New mail',
         icon: 'i-lucide-send',
-        to: '/inbox',
+        onSelect: () => {
+          isNotificationsSlideoverOpen.value = true
+        },
       },
       {
         label: 'New user',
         icon: 'i-lucide-user-plus',
-        to: '/users',
+        to: users.url(),
       },
     ],
   ] satisfies DropdownMenuItem[][]

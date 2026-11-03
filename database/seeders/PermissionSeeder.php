@@ -7,7 +7,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 
-class PermissionSeeder extends Seeder
+final class PermissionSeeder extends Seeder
 {
     /**
      * Run the database seeds.

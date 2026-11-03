@@ -17,9 +17,11 @@ test('delete role deletes a regular role', function (): void {
     $this->assertDatabaseMissing('roles', ['id' => $role->id]);
 });
 
-test('delete role throws for the super admin role', function (): void {
+test('delete role deletes the super admin role when protection is handled by the request', function (): void {
     $role = Role::findByName(Role::SUPER_ADMIN);
 
-    expect(fn (): bool => (new DeleteRole)->handle($role))
-        ->toThrow(InvalidArgumentException::class, 'The Super Admin role cannot be deleted.');
+    $deleted = (new DeleteRole)->handle($role);
+
+    expect($deleted)->toBeTrue();
+    $this->assertDatabaseMissing('roles', ['id' => $role->id]);
 });

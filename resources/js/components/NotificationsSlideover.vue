@@ -19,7 +19,7 @@
         class="relative -mx-3 flex items-center gap-3 rounded-md px-3 py-2.5 first:-mt-3 last:-mb-3 hover:bg-elevated/50"
       >
         <UChip color="error" :show="!!notification.unread" inset>
-          <UAvatar v-bind="notification.sender.avatar" :alt="notification.sender.name" size="md" />
+          <UAvatar :src="notification.sender.avatar" :alt="notification.sender.name" size="md" />
         </UChip>
 
         <div class="flex-1 text-sm">

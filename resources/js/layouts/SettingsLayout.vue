@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { appearance } from '@/routes'
+  import { appearance, members, notifications } from '@/routes'
+  import { edit as profileEdit } from '@/routes/profile'
+  import { show as securityShow } from '@/routes/security'
   import type { NavigationMenuItem } from '@nuxt/ui'
 
   const links = [
@@ -7,23 +9,23 @@
       {
         label: 'Profile',
         icon: 'i-lucide-user',
-        to: '/settings/profile',
+        to: profileEdit.url(),
         exact: true,
       },
       {
         label: 'Members',
         icon: 'i-lucide-users',
-        to: '/settings/members',
+        to: members.url(),
       },
       {
         label: 'Notifications',
         icon: 'i-lucide-bell',
-        to: '/settings/notifications',
+        to: notifications.url(),
       },
       {
         label: 'Security',
         icon: 'i-lucide-shield',
-        to: '/settings/security',
+        to: securityShow.url(),
       },
       {
         label: 'Appearance',

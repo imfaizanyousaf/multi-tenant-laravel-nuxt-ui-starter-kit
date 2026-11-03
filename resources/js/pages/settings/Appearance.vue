@@ -14,17 +14,17 @@
   const items = [
     {
       label: 'Light',
-      value: 'light',
+      value: 'light' as const,
       icon: 'i-lucide-sun',
     },
     {
       label: 'Dark',
-      value: 'dark',
+      value: 'dark' as const,
       icon: 'i-lucide-moon',
     },
     {
       label: 'System',
-      value: 'auto',
+      value: 'auto' as const,
       icon: 'i-lucide-monitor',
     },
   ]

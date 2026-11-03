@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\Role;
 
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 use function is_array;
 
-class UpdateRole
+final readonly class UpdateRole
 {
     /**
      * Update an existing role and sync permissions.
@@ -17,16 +18,18 @@ class UpdateRole
      */
     public function handle(Role $role, array $data): Role
     {
-        $roleName = $role->name === Role::SUPER_ADMIN ? Role::SUPER_ADMIN : $data['name'];
+        return DB::transaction(function () use ($role, $data): Role {
+            $roleName = $role->name === Role::SUPER_ADMIN ? Role::SUPER_ADMIN : $data['name'];
 
-        $role->update([
-            'name' => $roleName,
-        ]);
+            $role->update([
+                'name' => $roleName,
+            ]);
 
-        if (isset($data['permissions']) && is_array($data['permissions'])) {
-            $role->syncPermissions($data['permissions']);
-        }
+            if (isset($data['permissions']) && is_array($data['permissions'])) {
+                $role->syncPermissions($data['permissions']);
+            }
 
-        return $role;
+            return $role;
+        });
     }
 }

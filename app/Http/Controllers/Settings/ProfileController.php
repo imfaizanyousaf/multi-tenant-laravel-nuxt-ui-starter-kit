@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Settings;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Actions\User\DeleteUser;
+use App\Actions\User\UpdateUser;
+use App\Http\Requests\Settings\DeleteProfileRequest;
+use App\Http\Requests\Settings\UpdateProfileRequest;
+use App\Models\User;
+use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,7 +20,7 @@ use Inertia\Response;
 use function redirect;
 use function to_route;
 
-class ProfileController extends Controller
+final class ProfileController
 {
     /**
      * Show the user's profile settings page.
@@ -30,15 +36,12 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
+    public function update(
+        UpdateProfileRequest $request,
+        #[CurrentUser] User $user,
+        UpdateUser $updateUser,
+    ): RedirectResponse {
+        $updateUser->handle($user, $request->validated());
 
         return to_route('profile.edit');
     }
@@ -46,17 +49,14 @@ class ProfileController extends Controller
     /**
      * Delete the user's profile.
      */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
+    public function destroy(
+        DeleteProfileRequest $request,
+        #[CurrentUser] User $user,
+        DeleteUser $deleteUser,
+    ): RedirectResponse {
+        $deleteUser->handle($user);
 
         Auth::logout();
-
-        $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

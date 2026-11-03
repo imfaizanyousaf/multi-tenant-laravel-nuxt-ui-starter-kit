@@ -152,7 +152,11 @@
           <Form v-bind="confirm.form()" reset-on-error @finish="code = []" @success="open = false" v-slot="{ errors, processing }">
             <input type="hidden" name="code" :value="codeValue" />
             <div class="relative w-full space-y-8">
-              <UFormField name="code" :error="errors?.confirmTwoFactorAuthentication?.code" :ui="{ root: 'text-center' }">
+              <UFormField
+                name="code"
+                :error="((errors as Record<string, any>)?.confirmTwoFactorAuthentication?.code as string) || errors?.code"
+                :ui="{ root: 'text-center' }"
+              >
                 <UPinInput v-model="code" type="number" placeholder="○" size="xl" length="6" otp autofocus />
               </UFormField>
 
