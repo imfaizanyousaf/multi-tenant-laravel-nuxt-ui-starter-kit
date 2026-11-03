@@ -5,12 +5,23 @@ declare(strict_types=1);
 namespace App\Http\Requests\Settings;
 
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+final class UpdateProfileRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): Response
+    {
+        return $this->user() !== null
+            ? Response::allow()
+            : Response::deny();
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

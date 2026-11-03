@@ -13,7 +13,7 @@ use function is_numeric;
 use function is_string;
 use function str_contains;
 
-class DeleteBulkUsers
+final readonly class DeleteBulkUsers
 {
     /**
      * Delete multiple user records excluding the current authenticated user.

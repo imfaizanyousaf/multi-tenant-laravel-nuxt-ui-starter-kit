@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace App\Http\Requests\User;
 
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyBulkUserRequest extends FormRequest
+final class DeleteBulkUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return (bool) $this->user()?->can('deleteBulk', User::class);
+        return $this->user()?->can('deleteBulk', User::class)
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**

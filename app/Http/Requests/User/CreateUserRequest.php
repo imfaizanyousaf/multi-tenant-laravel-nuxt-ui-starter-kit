@@ -7,18 +7,21 @@ namespace App\Http\Requests\User;
 use App\Models\Role;
 use App\Models\User;
 use Closure;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class StoreUserRequest extends FormRequest
+final class CreateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return (bool) $this->user()?->can('create', User::class);
+        return $this->user()?->can('create', User::class)
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**
@@ -38,7 +41,7 @@ class StoreUserRequest extends FormRequest
                 'exists:roles,name',
                 function (string $attribute, mixed $value, Closure $fail): void {
                     if ($value === Role::SUPER_ADMIN) {
-                        $fail('The Super Admin role cannot be assigned.');
+                        $fail('The '.Role::SUPER_ADMIN.' role cannot be assigned.');
                     }
                 },
             ],

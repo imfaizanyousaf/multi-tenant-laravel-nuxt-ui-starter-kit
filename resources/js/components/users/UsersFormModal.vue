@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-  import { options, store, update } from '@/actions/App/Http/Controllers/UserController'
+  import { store, update } from '@/actions/App/Http/Controllers/UserController'
+  import options from '@/actions/App/Http/Controllers/UserOptionsController'
   import DialogForm from '@/components/app/DialogForm.vue'
   import { useAuth } from '@/composables/useAuth'
   import type { User } from '@/types'
@@ -185,7 +186,7 @@
     <template #footer>
       <div class="mt-8 mb-4 flex w-full flex-col gap-4 md:mt-0 md:mb-0 md:flex-row-reverse md:gap-2">
         <UButton
-          :disabled="!form.isDirty"
+          :disabled="!form.isDirty || form.processing"
           form="user-form"
           :label="form.id ? 'Update' : 'Create'"
           :loading="form.processing"

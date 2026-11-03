@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Actions\User;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 use function is_array;
 
-class CreateUser
+final readonly class CreateUser
 {
     /**
      * Create a new user record.
@@ -18,16 +18,18 @@ class CreateUser
      */
     public function handle(array $data): User
     {
-        $user = User::query()->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password'] ?? 'password'),
-        ]);
+        return DB::transaction(function () use ($data): User {
+            $user = User::query()->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'] ?? 'password',
+            ]);
 
-        if (isset($data['roles']) && is_array($data['roles'])) {
-            $user->syncRoles($data['roles']);
-        }
+            if (isset($data['roles']) && is_array($data['roles'])) {
+                $user->syncRoles($data['roles']);
+            }
 
-        return $user;
+            return $user;
+        });
     }
 }

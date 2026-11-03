@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { logout } from '@/routes'
+  import { edit as profileEdit } from '@/routes/profile'
   import { router } from '@inertiajs/vue3'
   import type { DropdownMenuItem } from '@nuxt/ui'
 
@@ -29,6 +30,7 @@
       {
         label: 'Profile',
         icon: 'i-lucide-user',
+        to: profileEdit.url(),
       },
       {
         label: 'Billing',
@@ -37,14 +39,13 @@
       {
         label: 'Settings',
         icon: 'i-lucide-settings',
-        to: '/settings/profile',
+        to: profileEdit.url(),
       },
     ],
     [
       {
         label: 'Log out',
         icon: 'i-lucide-log-out',
-        to: logout(),
         onSelect: () => handleLogout(),
       },
     ],
@@ -52,6 +53,7 @@
 
   function handleLogout() {
     router.flushAll()
+    router.post(logout.url())
   }
 </script>
 

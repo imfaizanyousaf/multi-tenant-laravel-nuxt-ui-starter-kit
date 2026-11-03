@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { store } from '@/actions/App/Http/Controllers/Auth/RegisteredUserController'
   import Layout from '@/layouts/AuthBasic.vue'
+  import { home, login } from '@/routes'
   import { Head, router } from '@inertiajs/vue3'
   import type { FormSubmitEvent } from '@nuxt/ui'
   import * as z from 'zod'
@@ -69,9 +70,11 @@
       :loading="form.processing"
       @submit="onSubmit"
     >
-      <template #description> Already have an account? <ULink to="/login" class="font-medium text-primary">Login</ULink>. </template>
+      <template #description> Already have an account? <ULink :to="login.url()" class="font-medium text-primary">Login</ULink>. </template>
 
-      <template #footer> By signing up, you agree to our <ULink to="/" class="font-medium text-primary">Terms of Service</ULink>. </template>
+      <template #footer>
+        By signing up, you agree to our <ULink :to="home.url()" class="font-medium text-primary">Terms of Service</ULink>.
+      </template>
     </UAuthForm>
   </div>
 </template>

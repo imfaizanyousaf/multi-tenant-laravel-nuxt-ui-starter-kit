@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { useAuth } from '@/composables/useAuth'
-  import { appearance } from '@/routes'
+  import { appearance, dashboard, home, members, notifications, roles, users } from '@/routes'
+  import { edit as profileEdit } from '@/routes/profile'
+  import { show as securityShow } from '@/routes/security'
   import type { NavigationMenuItem } from '@nuxt/ui'
 
   const { url } = usePage()
@@ -14,7 +16,7 @@
       {
         label: 'Home',
         icon: 'i-lucide-house',
-        to: '/dashboard',
+        to: dashboard.url(),
         onSelect: () => {
           open.value = false
         },
@@ -24,7 +26,7 @@
             {
               label: 'Users',
               icon: 'i-lucide-users',
-              to: '/users',
+              to: users.url(),
               onSelect: () => {
                 open.value = false
               },
@@ -36,7 +38,7 @@
             {
               label: 'Roles',
               icon: 'i-lucide-shield-check',
-              to: '/roles',
+              to: roles.url(),
               onSelect: () => {
                 open.value = false
               },
@@ -45,14 +47,14 @@
         : []),
       {
         label: 'Settings',
-        to: '/settings',
+        to: profileEdit.url(),
         icon: 'i-lucide-settings',
         defaultOpen: true,
         type: 'trigger',
         children: [
           {
             label: 'Profile',
-            to: '/settings/profile',
+            to: profileEdit.url(),
             exact: true,
             onSelect: () => {
               open.value = false
@@ -60,21 +62,21 @@
           },
           {
             label: 'Members',
-            to: '/settings/members',
+            to: members.url(),
             onSelect: () => {
               open.value = false
             },
           },
           {
             label: 'Notifications',
-            to: '/settings/notifications',
+            to: notifications.url(),
             onSelect: () => {
               open.value = false
             },
           },
           {
             label: 'Security',
-            to: '/settings/security',
+            to: securityShow.url(),
             onSelect: () => {
               open.value = false
             },
@@ -105,7 +107,7 @@
     ],
   ])
 
-  const groups = computed(() => [
+  const groups = computed<any>(() => [
     {
       id: 'links',
       label: 'Go to',
@@ -119,7 +121,7 @@
           id: 'source',
           label: 'View page source',
           icon: 'simple-icons:github',
-          to: `https://github.com/nuxt-ui-pro/dashboard-vue/blob/main/src/pages${url === '/' ? '/index' : url}.vue`,
+          to: `https://github.com/nuxt-ui-pro/dashboard-vue/blob/main/src/pages${url === home.url() ? '/index' : url}.vue`,
           target: '_blank',
         },
       ],

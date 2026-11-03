@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Actions\Auth\CreatePasswordResetLink;
+use App\Http\Requests\Auth\CreatePasswordResetLinkRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
 use function __;
 use function back;
 
-class PasswordResetLinkController extends Controller
+final class PasswordResetLinkController
 {
     /**
      * Show the password reset link request page.
@@ -27,18 +28,10 @@ class PasswordResetLinkController extends Controller
 
     /**
      * Handle an incoming password reset link request.
-     *
-     * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(CreatePasswordResetLinkRequest $request, CreatePasswordResetLink $createPasswordResetLink): RedirectResponse
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-        ]);
-
-        Password::sendResetLink(
-            $request->only('email')
-        );
+        $createPasswordResetLink->handle($request->email());
 
         return back()->with('status', __('A reset link will be sent if the account exists.'));
     }

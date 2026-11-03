@@ -150,6 +150,20 @@ test('super admin can delete a role but cannot delete super admin role', functio
     $this->assertDatabaseHas('roles', ['name' => Role::SUPER_ADMIN]);
 });
 
+test('non super admin cannot delete the super admin role', function (): void {
+    $role = Role::create(['name' => 'Role Deleter']);
+    $role->givePermissionTo('delete roles');
+    $manager = User::factory()->create();
+    $manager->assignRole($role);
+
+    $superAdminRole = Role::findByName(Role::SUPER_ADMIN);
+
+    $response = $this->actingAs($manager)->delete(route('roles.destroy', $superAdminRole));
+
+    $response->assertForbidden();
+    $this->assertDatabaseHas('roles', ['name' => Role::SUPER_ADMIN]);
+});
+
 test('super admin can bulk delete roles', function (): void {
     $superAdmin = User::factory()->create();
     $superAdmin->assignRole(Role::SUPER_ADMIN);

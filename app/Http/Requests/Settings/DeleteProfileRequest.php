@@ -1,22 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Settings;
 
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Laravel\Fortify\Features;
-use Laravel\Fortify\InteractsWithTwoFactorState;
 
-class TwoFactorAuthenticationRequest extends FormRequest
+final class DeleteProfileRequest extends FormRequest
 {
-    use InteractsWithTwoFactorState;
-
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return Features::enabled(Features::twoFactorAuthentication());
+        return $this->user() !== null
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**
@@ -26,6 +27,8 @@ class TwoFactorAuthenticationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'password' => ['required', 'current_password'],
+        ];
     }
 }

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  import { destroy, destroyBulk, table } from '@/actions/App/Http/Controllers/RoleController'
+  import { destroy } from '@/actions/App/Http/Controllers/RoleController'
+  import { destroy as destroyBulk } from '@/actions/App/Http/Controllers/RoleBulkDeletionController'
+  import table from '@/actions/App/Http/Controllers/RoleTableController'
   import DataTable from '@/components/app/DataTable/Index.vue'
   import { baseBulkActions, baseRowActions, columns, config } from '@/components/roles/data'
   import RolesFormModal from '@/components/roles/RolesFormModal.vue'
@@ -37,7 +39,7 @@
         if (row.original.name === ROLE_SUPER_ADMIN) {
           toast.add({
             title: 'Action prohibited',
-            description: 'The Super Admin role cannot be deleted.',
+            description: `The ${ROLE_SUPER_ADMIN} role cannot be deleted.`,
             color: 'error',
           })
           return

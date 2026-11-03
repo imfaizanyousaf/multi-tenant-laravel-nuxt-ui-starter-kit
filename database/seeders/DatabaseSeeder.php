@@ -11,7 +11,7 @@ use Illuminate\Database\Seeder;
 
 use function now;
 
-class DatabaseSeeder extends Seeder
+final class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.

@@ -7,7 +7,7 @@ namespace App\Policies;
 use App\Models\Role;
 use App\Models\User;
 
-class UserPolicy
+final class UserPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -31,6 +31,14 @@ class UserPolicy
     public function create(User $user): bool
     {
         return $user->can('create users');
+    }
+
+    /**
+     * Determine whether the user can view user role options.
+     */
+    public function viewOptions(User $user): bool
+    {
+        return $user->canAny(['create users', 'update users']);
     }
 
     /**
@@ -70,6 +78,10 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
+        if ($model->hasRole(Role::SUPER_ADMIN)) {
+            return false;
+        }
+
         return $user->can('update users');
     }
 
@@ -78,6 +90,10 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
+        if ($model->hasRole(Role::SUPER_ADMIN)) {
+            return false;
+        }
+
         return $user->can('delete users');
     }
 }

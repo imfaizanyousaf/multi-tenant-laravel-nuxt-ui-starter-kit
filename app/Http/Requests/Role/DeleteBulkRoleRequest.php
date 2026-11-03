@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Role;
 
+use App\Models\Role;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Spatie\Permission\Models\Role;
 
-class StoreRoleRequest extends FormRequest
+final class DeleteBulkRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return (bool) $this->user()?->can('create', Role::class);
+        return $this->user()?->can('deleteBulk', Role::class)
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**
@@ -27,20 +30,14 @@ class StoreRoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => [
+            'ids' => [
                 'required',
-                'string',
-                'min:2',
-                'max:50',
-                Rule::unique('roles', 'name'),
-            ],
-            'permissions' => [
-                'nullable',
                 'array',
+                'min:1',
             ],
-            'permissions.*' => [
-                'string',
-                Rule::exists('permissions', 'name'),
+            'ids.*' => [
+                'required',
+                Rule::exists('roles', 'id'),
             ],
         ];
     }

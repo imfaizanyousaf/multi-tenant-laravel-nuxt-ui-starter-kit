@@ -6,7 +6,7 @@ namespace App\Actions\User;
 
 use App\Models\User;
 
-class DeleteUser
+final readonly class DeleteUser
 {
     /**
      * Delete a single user record.

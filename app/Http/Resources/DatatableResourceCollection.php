@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 use function is_array;
 
-class DatatableResourceCollection extends ResourceCollection
+final class DatatableResourceCollection extends ResourceCollection
 {
     /**
      * Constructor that accepts the paginator and the resource class.

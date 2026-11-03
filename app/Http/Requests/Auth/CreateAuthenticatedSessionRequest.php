@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,14 +17,14 @@ use function ceil;
 use function event;
 use function trans;
 
-class LoginRequest extends FormRequest
+final class CreateAuthenticatedSessionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return true;
+        return Response::allow();
     }
 
     /**

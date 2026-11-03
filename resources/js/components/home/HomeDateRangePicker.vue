@@ -99,8 +99,8 @@
       <div class="flex items-stretch divide-default sm:divide-x">
         <div class="hidden flex-col justify-center sm:flex">
           <UButton
-            v-for="(range, index) in ranges"
-            :key="index"
+            v-for="range in ranges"
+            :key="range.label"
             :label="range.label"
             color="neutral"
             variant="ghost"

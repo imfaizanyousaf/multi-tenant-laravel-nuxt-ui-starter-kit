@@ -2,54 +2,48 @@
 
 declare(strict_types=1);
 
-use App\Actions\Role\GetPaginatedRoles;
 use App\Models\Role;
+use App\Queries\RoleListQuery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Request;
 
 uses(RefreshDatabase::class);
 
-test('get paginated roles works with default null request', function (): void {
+test('role list query works with default arguments', function (): void {
     Role::create(['name' => 'Role A']);
     Role::create(['name' => 'Role B']);
 
-    $result = (new GetPaginatedRoles)->handle();
+    $result = (new RoleListQuery)->handle();
 
     expect($result->total())->toBe(3);
 });
 
-test('get paginated roles filters by search term', function (): void {
+test('role list query filters by search term', function (): void {
     Role::create(['name' => 'Manager']);
     Role::create(['name' => 'Editor']);
 
-    $req = Request::create('/roles', 'GET', ['search' => 'Manager']);
-
-    $result = (new GetPaginatedRoles)->handle($req);
+    $result = (new RoleListQuery)->handle(search: 'Manager');
 
     expect($result->total())->toBe(1);
     expect($result->items()[0]->name)->toBe('Manager');
 });
 
-test('get paginated roles sorts by column and respects per page', function (): void {
+test('role list query sorts by column and respects per page', function (): void {
     $manager = Role::create(['name' => 'Manager']);
     $editor = Role::create(['name' => 'Editor']);
     $writer = Role::create(['name' => 'Writer']);
 
-    $req = Request::create('/roles', 'GET', ['sort' => 'name.asc', 'per_page' => '2']);
-
-    $result = (new GetPaginatedRoles)->handle($req);
+    $result = (new RoleListQuery)->handle(sort: 'name.asc', perPage: 2);
 
     expect($result->perPage())->toBe(2);
     expect($result->items()[0]->name)->toBe($editor->name)
         ->and($result->items()[1]->name)->toBe($manager->name);
 
-    $descReq = Request::create('/roles', 'GET', ['sort' => 'name.desc']);
-    $descResult = (new GetPaginatedRoles)->handle($descReq);
+    $descResult = (new RoleListQuery)->handle(sort: 'name.desc');
 
     expect($descResult->items()[0]->name)->toBe($writer->name);
 });
 
-test('get paginated roles falls back to latest when sort yields no column', function (): void {
+test('role list query falls back to latest when sort yields no column', function (): void {
     $writer = Role::create(['name' => 'Writer']);
     $editor = Role::create(['name' => 'Editor']);
 
@@ -57,9 +51,11 @@ test('get paginated roles falls back to latest when sort yields no column', func
     Role::query()->where('id', $writer->id)->update(['created_at' => now()->subMinutes(10)]);
     Role::query()->where('id', $editor->id)->update(['created_at' => now()->subMinutes(5)]);
 
-    $req = Request::create('/roles', 'GET', ['sort' => 'name']);
-
-    $result = (new GetPaginatedRoles)->handle($req);
+    $result = (new RoleListQuery)->handle(sort: 'name');
 
     expect($result->items()[0]->id)->toBe($editor->id);
+
+    $invalidSortResult = (new RoleListQuery)->handle(sort: 'password.asc');
+
+    expect($invalidSortResult->items()[0]->id)->toBe($editor->id);
 });
