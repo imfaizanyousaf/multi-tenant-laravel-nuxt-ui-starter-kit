@@ -11,7 +11,7 @@ use Spatie\Multitenancy\Tasks\SwitchTenantTask;
 
 use function config;
 
-class SwitchTenantDatabaseTask implements SwitchTenantTask
+final class SwitchTenantDatabaseTask implements SwitchTenantTask
 {
     public function makeCurrent(IsTenant $tenant): void
     {

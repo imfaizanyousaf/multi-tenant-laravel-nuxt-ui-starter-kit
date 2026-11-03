@@ -8,7 +8,7 @@ use App\Enums\TenantStatus;
 use App\Models\Tenant;
 use App\Models\User;
 
-class TenantPolicy
+final class TenantPolicy
 {
     /**
      * Determine whether the user can view any models.

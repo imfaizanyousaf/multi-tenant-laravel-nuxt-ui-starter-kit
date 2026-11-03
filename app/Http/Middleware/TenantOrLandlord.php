@@ -8,15 +8,16 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Multitenancy\Models\Tenant;
+use Symfony\Component\HttpFoundation\Response;
 
 use function abort_unless;
 use function config;
 use function in_array;
 use function to_route;
 
-class TenantOrLandlord
+final class TenantOrLandlord
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $host = $request->getHost();
 

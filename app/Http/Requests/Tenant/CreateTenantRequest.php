@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Requests;
+declare(strict_types=1);
+
+namespace App\Http\Requests\Tenant;
 
 use App\Models\Tenant;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreTenantRequest extends FormRequest
+final class CreateTenantRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return $this->user()?->can('create', Tenant::class) ?? false;
+        return $this->user()?->can('create', Tenant::class)
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array

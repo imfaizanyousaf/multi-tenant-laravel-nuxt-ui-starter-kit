@@ -13,11 +13,11 @@ use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
  * @property TenantStatus $status
  */
 #[Fillable(['name', 'domain', 'database', 'status'])]
-class Tenant extends SpatieTenant
+final class Tenant extends SpatieTenant
 {
     use HasFactory;
 
-    protected function casts(): array
+    public function casts(): array
     {
         return [
             'status' => TenantStatus::class,

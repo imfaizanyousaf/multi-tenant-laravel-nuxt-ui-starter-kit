@@ -1,23 +1,26 @@
 <?php
 
-namespace App\Http\Requests;
+declare(strict_types=1);
 
+namespace App\Http\Requests\Tenant;
+
+use App\Models\Tenant;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyTenantRequest extends FormRequest
+final class DeleteTenantRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize(): Response
     {
-        return $this->user()?->can('delete', $this->route('tenant')) ?? false;
+        $tenant = $this->route('tenant');
+
+        return $tenant instanceof Tenant && $this->user()?->can('delete', $tenant)
+            ? Response::allow()
+            : Response::deny();
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
@@ -28,8 +31,6 @@ class DestroyTenantRequest extends FormRequest
     }
 
     /**
-     * Get the error messages for the defined validation rules.
-     *
      * @return array<string, string>
      */
     public function messages(): array

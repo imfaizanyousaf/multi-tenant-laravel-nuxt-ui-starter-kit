@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import { destroy, table } from '@/actions/App/Http/Controllers/TenantController'
+  import { destroy } from '@/actions/App/Http/Controllers/TenantController'
+  import table from '@/actions/App/Http/Controllers/TenantTableController'
   import DataTable from '@/components/app/DataTable/Index.vue'
   import { baseRowActions, columns, config } from '@/components/tenants/data'
   import TenantsFormModal from '@/components/tenants/TenantsFormModal.vue'

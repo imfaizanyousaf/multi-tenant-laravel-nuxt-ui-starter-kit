@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use function config;
 use function dispatch;
 
-class CreateTenant
+final class CreateTenant
 {
     public function handle(string $name): Tenant
     {

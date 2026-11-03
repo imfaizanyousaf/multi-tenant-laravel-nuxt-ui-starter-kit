@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use function config;
 
-class DeleteTenant
+final class DeleteTenant
 {
     public function handle(Tenant $tenant): void
     {

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 
-class CreateTenantDatabase implements NotTenantAware, ShouldQueue
+final class CreateTenantDatabase implements NotTenantAware, ShouldQueue
 {
     use Queueable;
 

@@ -6,14 +6,15 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 use function abort_if;
 use function config;
 use function in_array;
 
-class LandlordOnly
+final class LandlordOnly
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $host = $request->getHost();
 
